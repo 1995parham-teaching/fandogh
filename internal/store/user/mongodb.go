@@ -24,11 +24,8 @@ type MongoUser struct {
 	Tracer trace.Tracer
 }
 
-const (
-	// Collection is a name of the MongoDB collection for Users.
-	Collection                   = "users"
-	mongodbDuplicateKeyErrorCode = 11000
-)
+// Collection is a name of the MongoDB collection for Users.
+const Collection = "users"
 
 // NewMongoUser creates new User store.
 func NewMongoUser(db *mongo.Database, tracer trace.Tracer) *MongoUser {
@@ -48,10 +45,7 @@ func (s *MongoUser) Set(ctx context.Context, user model.User) error {
 	if _, err := users.InsertOne(ctx, user); err != nil {
 		span.RecordError(err)
 
-		var exp mongo.WriteException
-
-		if ok := errors.As(err, &exp); ok &&
-			exp.WriteErrors[0].Code == mongodbDuplicateKeyErrorCode {
+		if mongo.IsDuplicateKeyError(err) {
 			return ErrEmailDuplicate
 		}
 
