@@ -10,11 +10,13 @@ import (
 	"github.com/1995parham/fandogh/internal/store/user"
 	"github.com/labstack/echo/v4"
 	"go.opentelemetry.io/otel/trace"
+	"go.uber.org/zap"
 )
 
 type User struct {
 	Store  user.User
 	Tracer trace.Tracer
+	Logger *zap.Logger
 }
 
 // nolint: wrapcheck
