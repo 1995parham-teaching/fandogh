@@ -31,3 +31,21 @@ func (r Register) Validate() error {
 
 	return nil
 }
+
+// Login represents a login request payload.
+type Login struct {
+	Email    string
+	Password string
+}
+
+// Validate login request payload.
+func (r Login) Validate() error {
+	if err := validation.ValidateStruct(&r,
+		validation.Field(&r.Email, validation.Required, is.Email),
+		validation.Field(&r.Password, validation.Required, validation.Length(PasswordMinLength, PasswordMaxLength)),
+	); err != nil {
+		return fmt.Errorf("register request validation failed: %w", err)
+	}
+
+	return nil
+}
