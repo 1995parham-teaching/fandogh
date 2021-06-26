@@ -7,7 +7,7 @@ import (
 )
 
 // User stores and retrieves users.
-type URL interface {
-	Set(ctx context.Context, user model.User) string
+type User interface {
+	Set(ctx context.Context, user model.User) error
 	Get(ctx context.Context, email string) (model.User, error)
 }
