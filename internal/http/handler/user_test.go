@@ -55,11 +55,20 @@ func (suite *UserSuite) TestBadRequest() {
 	})
 	require.NoError(err)
 
-	w := httptest.NewRecorder()
-	req := httptest.NewRequest("POST", "/register", bytes.NewReader(b))
+	{
+		w := httptest.NewRecorder()
+		req := httptest.NewRequest("POST", "/register", bytes.NewReader(b))
 
-	suite.engine.ServeHTTP(w, req)
-	require.Equal(http.StatusBadRequest, w.Code)
+		suite.engine.ServeHTTP(w, req)
+		require.Equal(http.StatusBadRequest, w.Code)
+	}
+	{
+		w := httptest.NewRecorder()
+		req := httptest.NewRequest("POST", "/login", bytes.NewReader(b))
+
+		suite.engine.ServeHTTP(w, req)
+		require.Equal(http.StatusBadRequest, w.Code)
+	}
 }
 
 func (suite *UserSuite) TestRegister() {
@@ -146,6 +155,13 @@ func (suite *UserSuite) TestLogin() {
 			code: http.StatusNotFound,
 			login: request.Login{
 				Email:    "noone@gmail.com",
+				Password: "123456",
+			},
+		}, {
+			name: "Inavlid Email",
+			code: http.StatusBadRequest,
+			login: request.Login{
+				Email:    "@gmail.com",
 				Password: "123456",
 			},
 		},
