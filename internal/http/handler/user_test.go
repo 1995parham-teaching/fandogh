@@ -116,11 +116,11 @@ func (suite *UserSuite) TestRegister() {
 func (suite *UserSuite) TestLogin() {
 	require := suite.Require()
 
-	suite.store.Set(context.Background(), model.User{
+	require.NoError(suite.store.Set(context.Background(), model.User{
 		Name:     "Elahe Dastan",
 		Email:    "elahe.dstn@gmail.com",
 		Password: "123456",
-	})
+	}))
 
 	cases := []struct {
 		name  string
