@@ -82,7 +82,6 @@ func TestRegisterValidation(t *testing.T) {
 	}
 }
 
-// nolint: funlen
 func TestLoginValidation(t *testing.T) {
 	t.Parallel()
 
