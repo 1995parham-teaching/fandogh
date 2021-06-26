@@ -13,8 +13,12 @@ type Config struct {
 	AccessTokenSecret string
 }
 
+type JWT struct {
+	Config
+}
+
 // NewAccessToken creates new access token for given user.
-func NewAccessToken(u model.User, cfg Config) (string, error) {
+func (j JWT) NewAccessToken(u model.User) (string, error) {
 	// create token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Audience:  "user",
@@ -27,7 +31,7 @@ func NewAccessToken(u model.User, cfg Config) (string, error) {
 	})
 
 	// generate encoded token and send it as response
-	encodedToken, err := token.SignedString([]byte(cfg.AccessTokenSecret))
+	encodedToken, err := token.SignedString([]byte(j.AccessTokenSecret))
 	if err != nil {
 		return "", fmt.Errorf("failed to sign a token: %w", err)
 	}
