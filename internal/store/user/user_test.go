@@ -37,7 +37,13 @@ func (suite *MongoUserSuite) TearDownSuite() {
 	suite.Require().NoError(suite.DB.Client().Disconnect(context.Background()))
 }
 
-// nolint: funlen
+func (suite *MongoUserSuite) TestNoEmail() {
+	require := suite.Require()
+
+	_, err := suite.Store.Get(context.Background(), "notexists@gmail.com")
+	require.Equal(user.ErrEmailNotFound, err)
+}
+
 func (suite *MongoUserSuite) TestSetGet() {
 	require := suite.Require()
 
