@@ -2,13 +2,16 @@ package handler_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/1995parham/fandogh/internal/http/handler"
+	"github.com/1995parham/fandogh/internal/http/jwt"
 	"github.com/1995parham/fandogh/internal/http/request"
+	"github.com/1995parham/fandogh/internal/model"
 	store "github.com/1995parham/fandogh/internal/store/user"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/suite"
@@ -19,16 +22,23 @@ import (
 type UserSuite struct {
 	suite.Suite
 
+	store  store.User
 	engine *echo.Echo
 }
 
 func (suite *UserSuite) SetupSuite() {
 	suite.engine = echo.New()
+	suite.store = store.NewMemoryUser()
 
 	user := handler.User{
-		Store:  store.NewMemoryUser(),
+		Store:  suite.store,
 		Logger: zap.NewNop(),
 		Tracer: trace.NewNoopTracerProvider().Tracer(""),
+		JWT: jwt.JWT{
+			Config: jwt.Config{
+				AccessTokenSecret: "secret",
+			},
+		},
 	}
 
 	user.Register(suite.engine.Group(""))
@@ -95,6 +105,60 @@ func (suite *UserSuite) TestRegister() {
 
 			w := httptest.NewRecorder()
 			req := httptest.NewRequest("POST", "/register", bytes.NewReader(b))
+			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+
+			suite.engine.ServeHTTP(w, req)
+			require.Equal(c.code, w.Code)
+		})
+	}
+}
+
+func (suite *UserSuite) TestLogin() {
+	require := suite.Require()
+
+	suite.store.Set(context.Background(), model.User{
+		Name:     "Elahe Dastan",
+		Email:    "elahe.dstn@gmail.com",
+		Password: "123456",
+	})
+
+	cases := []struct {
+		name  string
+		code  int
+		login request.Login
+	}{
+		{
+			name: "Successful",
+			code: http.StatusOK,
+			login: request.Login{
+				Email:    "elahe.dstn@gmail.com",
+				Password: "123456",
+			},
+		}, {
+			name: "Incorrect Password",
+			code: http.StatusUnauthorized,
+			login: request.Login{
+				Email:    "elahe.dstn@gmail.com",
+				Password: "1234567",
+			},
+		}, {
+			name: "No Email",
+			code: http.StatusNotFound,
+			login: request.Login{
+				Email:    "noone@gmail.com",
+				Password: "123456",
+			},
+		},
+	}
+
+	for _, c := range cases {
+		c := c
+		suite.Run(c.name, func() {
+			b, err := json.Marshal(c.login)
+			require.NoError(err)
+
+			w := httptest.NewRecorder()
+			req := httptest.NewRequest("POST", "/login", bytes.NewReader(b))
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 
 			suite.engine.ServeHTTP(w, req)

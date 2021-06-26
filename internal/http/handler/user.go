@@ -112,4 +112,5 @@ func (h User) Login(c echo.Context) error {
 // Register registers the routes of User handler on given group.
 func (h User) Register(g *echo.Group) {
 	g.POST("/register", h.Create)
+	g.POST("/login", h.Login)
 }
