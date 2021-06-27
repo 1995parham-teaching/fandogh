@@ -7,6 +7,12 @@ const (
 	Double Bed = 2
 )
 
+// Photo contains the information use for minio.
+type Photo struct {
+	Name        string
+	ContentType string
+}
+
 // Home represents a home to rent. contract types and room types are string to handle them more easier.
 type Home struct {
 	ID              string            `bson:"_id"`
