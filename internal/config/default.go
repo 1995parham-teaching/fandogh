@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/1995parham/fandogh/internal/db"
+	"github.com/1995parham/fandogh/internal/fs"
 	"github.com/1995parham/fandogh/internal/logger"
 	"github.com/1995parham/fandogh/internal/metric"
 	telemetry "github.com/1995parham/fandogh/internal/telemetry/config"
@@ -22,6 +23,12 @@ func Default() Config {
 		Database: db.Config{
 			Name: "fandogh",
 			URL:  "mongodb://127.0.0.1:27017",
+		},
+		FileStorage: fs.Config{
+			Endpoint:  "127.0.0.1:9000",
+			AccessKey: "access",
+			SecretKey: "topsecret",
+			UseSSL:    false,
 		},
 		Monitoring: metric.Config{
 			Address: ":8080",

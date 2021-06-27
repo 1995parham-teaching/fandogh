@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/1995parham/fandogh/internal/db"
+	"github.com/1995parham/fandogh/internal/fs"
 	"github.com/1995parham/fandogh/internal/logger"
 	"github.com/1995parham/fandogh/internal/metric"
 	telemetry "github.com/1995parham/fandogh/internal/telemetry/config"
@@ -23,10 +24,11 @@ const (
 type (
 	// Config holds all configurations.
 	Config struct {
-		Database   db.Config        `koanf:"database"`
-		Monitoring metric.Config    `koanf:"monitoring"`
-		Logger     logger.Config    `koanf:"logger"`
-		Telemetry  telemetry.Config `koanf:"telemetry"`
+		Database    db.Config        `koanf:"database"`
+		FileStorage fs.Config        `koanf:"file_storage"`
+		Monitoring  metric.Config    `koanf:"monitoring"`
+		Logger      logger.Config    `koanf:"logger"`
+		Telemetry   telemetry.Config `koanf:"telemetry"`
 	}
 )
 
