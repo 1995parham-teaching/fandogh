@@ -28,6 +28,7 @@ func (suite *CommonHomeSuite) TestNoID() {
 	require.Equal(home.ErrIDNotFound, err)
 }
 
+// nolint: funlen
 func (suite *CommonHomeSuite) TestSetGet() {
 	require := suite.Require()
 
