@@ -13,6 +13,7 @@ require (
 	github.com/knadh/koanf v1.1.1
 	github.com/labstack/echo/v4 v4.3.0
 	github.com/mattn/go-isatty v0.0.13 // indirect
+	github.com/minio/minio-go/v7 v7.0.11 // indirect
 	github.com/prometheus/client_golang v1.11.0
 	github.com/prometheus/common v0.29.0 // indirect
 	github.com/spf13/cobra v1.1.3
