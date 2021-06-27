@@ -11,11 +11,15 @@ import (
 	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.opentelemetry.io/otel/trace"
 )
 
-var ErrIDNotFound = errors.New("home id does not exist")
+var (
+	ErrIDNotFound = errors.New("home id does not exist")
+	ErrIDNotEmpty = errors.New("home id must be empty")
+)
 
 // MongoURL communicate with homes collection in MongoDB.
 type MongoHome struct {
@@ -50,6 +54,12 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 		return fmt.Errorf("minio bucket creation/checking failed: %w", err)
 	}
 
+	if home.ID != "" {
+		return ErrIDNotEmpty
+	}
+
+	home.ID = primitive.NewObjectID().String()
+
 	if home.Photos == nil {
 		home.Photos = make(map[string]string)
 	}
@@ -67,16 +77,11 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 
 	users := s.DB.Collection(Collection)
 
-	result, err := users.InsertOne(ctx, home)
-	if err != nil {
+	if _, err := users.InsertOne(ctx, home); err != nil {
 		span.RecordError(err)
 
 		return fmt.Errorf("mongodb failed: %w", err)
 	}
-
-	id, _ := result.InsertedID.(string)
-
-	home.ID = id
 
 	return nil
 }
