@@ -11,6 +11,7 @@ const (
 type Photo struct {
 	Name        string
 	ContentType string
+	Content     []byte
 }
 
 // Home represents a home to rent. contract types and room types are string to handle them more easier.
