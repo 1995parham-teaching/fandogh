@@ -51,10 +51,14 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 	defer span.End()
 
 	if err := fs.Bucket(s.Minio, Bucket); err != nil {
+		span.RecordError(ErrIDNotEmpty)
+
 		return fmt.Errorf("minio bucket creation/checking failed: %w", err)
 	}
 
 	if home.ID != "" {
+		span.RecordError(ErrIDNotEmpty)
+
 		return ErrIDNotEmpty
 	}
 
@@ -71,6 +75,8 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 			bytes.NewReader(photo.Content), int64(len(photo.Content)), minio.PutObjectOptions{
 				ContentType: photo.ContentType,
 			}); err != nil {
+			span.RecordError(err)
+
 			return fmt.Errorf("minio object creation failed: %w", err)
 		}
 	}
