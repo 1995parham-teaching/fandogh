@@ -9,7 +9,7 @@ services:
     image: minio/minio
     environment:
       - MINIO_ACCESS_KEY=access
-      - MINIO_SECRET_KEY=secret
+      - MINIO_SECRET_KEY=topsecret
     ports:
       - 9000:9000
     command: server /data
