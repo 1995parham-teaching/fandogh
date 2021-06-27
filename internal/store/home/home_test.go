@@ -70,6 +70,37 @@ func (suite *CommonHomeSuite) TestSetGet() {
 			expectedSetErr: nil,
 			expectedGetErr: nil,
 		},
+		{
+			name: "ID Not Empty",
+			home: model.Home{
+				ID:              "1378",
+				Title:           "127.0.0.1",
+				Location:        "Iran, Tehran",
+				Description:     "Home Sweet Home",
+				Peoples:         4,
+				Room:            "room_type",
+				Bed:             model.Double,
+				Rooms:           2,
+				Bathrooms:       2,
+				Smoking:         false,
+				Guest:           false,
+				Pet:             false,
+				BillsIncluded:   true,
+				Contract:        "contract_type",
+				SecurityDeposit: 0,
+				Photos:          nil,
+				Price:           0,
+			},
+			photos: []model.Photo{
+				{
+					Name:        "1.png",
+					ContentType: "image/png",
+					Content:     []byte{'1', '2', '3'},
+				},
+			},
+			expectedSetErr: home.ErrIDNotEmpty,
+			expectedGetErr: nil,
+		},
 	}
 
 	for _, c := range cases {
