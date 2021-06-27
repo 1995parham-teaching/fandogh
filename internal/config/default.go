@@ -29,7 +29,6 @@ func Default() Config {
 			AccessKey: "access",
 			SecretKey: "topsecret",
 			UseSSL:    false,
-			Bucket:    "photos",
 		},
 		Monitoring: metric.Config{
 			Address: ":8080",

@@ -20,17 +20,21 @@ func New(cfg Config) (*minio.Client, error) {
 		return nil, fmt.Errorf("minio connection failed: %w", err)
 	}
 
-	found, err := client.BucketExists(context.Background(), cfg.Bucket)
+	return client, nil
+}
+
+func Bucket(client *minio.Client, bucket string) error {
+	found, err := client.BucketExists(context.Background(), bucket)
 	if err != nil {
-		return nil, fmt.Errorf("cannot check minio bucket [%s] existence: %w", cfg.Bucket, err)
+		return fmt.Errorf("cannot check minio bucket [%s] existence: %w", bucket, err)
 	}
 
 	if !found {
 		// nolint: exhaustivestruct
-		if err := client.MakeBucket(context.Background(), cfg.Bucket, minio.MakeBucketOptions{}); err != nil {
-			return nil, fmt.Errorf("cannot make minio bucket [%s]: %w", cfg.Bucket, err)
+		if err := client.MakeBucket(context.Background(), bucket, minio.MakeBucketOptions{}); err != nil {
+			return fmt.Errorf("cannot make minio bucket [%s]: %w", bucket, err)
 		}
 	}
 
-	return client, nil
+	return nil
 }
