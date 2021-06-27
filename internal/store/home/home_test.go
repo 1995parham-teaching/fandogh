@@ -20,7 +20,7 @@ type CommonHomeSuite struct {
 	Store home.Home
 }
 
-func (suite *CommonHomeSuite) TestNoEmail() {
+func (suite *CommonHomeSuite) TestNoID() {
 	require := suite.Require()
 
 	_, err := suite.Store.Get(context.Background(), "invalid_id")
@@ -33,6 +33,7 @@ func (suite *CommonHomeSuite) TestSetGet() {
 	cases := []struct {
 		name           string
 		home           model.Home
+		photos         []model.Photo
 		expectedSetErr error
 		expectedGetErr error
 	}{
@@ -54,10 +55,15 @@ func (suite *CommonHomeSuite) TestSetGet() {
 				BillsIncluded:   true,
 				Contract:        "contract_type",
 				SecurityDeposit: 0,
-				Photos: map[string]string{
-					"1.png": "hashed",
+				Photos:          nil,
+				Price:           0,
+			},
+			photos: []model.Photo{
+				{
+					Name:        "1.png",
+					ContentType: "image/png",
+					Content:     []byte{'1', '2', '3'},
 				},
-				Price: 0,
 			},
 			expectedSetErr: nil,
 			expectedGetErr: nil,
@@ -67,11 +73,16 @@ func (suite *CommonHomeSuite) TestSetGet() {
 	for _, c := range cases {
 		c := c
 		suite.Run(c.name, func() {
-			id, err := suite.Store.Set(context.Background(), c.home)
-			require.Equal(c.expectedSetErr, err)
+			require.Equal(c.expectedSetErr, suite.Store.Set(context.Background(), &c.home, c.photos))
+			require.NotEmpty(c.home.ID)
+
+			require.NotNil(c.home.Photos)
+			for _, key := range c.home.Photos {
+				require.NotEmpty(key)
+			}
 
 			if c.expectedSetErr == nil {
-				home, err := suite.Store.Get(context.Background(), id)
+				home, err := suite.Store.Get(context.Background(), c.home.ID)
 				require.Equal(c.expectedGetErr, err)
 				if c.expectedGetErr == nil {
 					require.Equal(c.home, home)
