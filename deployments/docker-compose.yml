@@ -5,6 +5,14 @@ services:
     image: mongo:latest
     ports:
       - 27017:27017
+  minio:
+    image: minio/minio
+    environment:
+      - MINIO_ACCESS_KEY=access
+      - MINIO_SECRET_KEY=secret
+    ports:
+      - 9000:9000
+    command: server /data
   jaeger:
     image: jaegertracing/all-in-one:latest
     ports:
