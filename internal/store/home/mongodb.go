@@ -44,10 +44,7 @@ func (s *MongoHome) Set(ctx context.Context, home model.Home) (string, error) {
 		return "", fmt.Errorf("mongodb failed: %w", err)
 	}
 
-	id, ok := result.InsertedID.(string)
-	if !ok {
-		panic("invalid mongodb id type")
-	}
+	id, _ := result.InsertedID.(string)
 
 	return id, nil
 }
