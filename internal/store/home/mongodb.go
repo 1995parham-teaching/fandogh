@@ -7,7 +7,6 @@ import (
 
 	"github.com/1995parham/fandogh/internal/model"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -45,12 +44,12 @@ func (s *MongoHome) Set(ctx context.Context, home model.Home) (string, error) {
 		return "", fmt.Errorf("mongodb failed: %w", err)
 	}
 
-	id, ok := result.InsertedID.(primitive.ObjectID)
+	id, ok := result.InsertedID.(string)
 	if !ok {
 		panic("invalid mongodb id type")
 	}
 
-	return id.String(), nil
+	return id, nil
 }
 
 // Get retrieves home of the given id if it exists.
