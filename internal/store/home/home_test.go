@@ -6,6 +6,7 @@ import (
 
 	"github.com/1995parham/fandogh/internal/config"
 	"github.com/1995parham/fandogh/internal/db"
+	"github.com/1995parham/fandogh/internal/fs"
 	"github.com/1995parham/fandogh/internal/model"
 	"github.com/1995parham/fandogh/internal/store/home"
 	"github.com/1995parham/fandogh/internal/store/user"
@@ -103,8 +104,11 @@ func (suite *MongoHomeSuite) SetupSuite() {
 	db, err := db.New(cfg.Database)
 	suite.Require().NoError(err)
 
+	minio, err := fs.New(cfg.FileStorage)
+	suite.Require().NoError(err)
+
 	suite.DB = db
-	suite.Store = home.NewMongoHome(db, trace.NewNoopTracerProvider().Tracer(""))
+	suite.Store = home.NewMongoHome(db, minio, trace.NewNoopTracerProvider().Tracer(""))
 }
 
 func (suite *MongoHomeSuite) TearDownSuite() {
