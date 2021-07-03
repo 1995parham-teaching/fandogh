@@ -10,7 +10,9 @@ import (
 	"github.com/1995parham/fandogh/internal/config"
 	"github.com/1995parham/fandogh/internal/db"
 	"github.com/1995parham/fandogh/internal/http/handler"
+	"github.com/1995parham/fandogh/internal/http/jwt"
 	"github.com/1995parham/fandogh/internal/metric"
+	"github.com/1995parham/fandogh/internal/store/user"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/cobra"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
@@ -23,7 +25,7 @@ func main(cfg config.Config, logger *zap.Logger, tracer trace.Tracer) {
 
 	app := echo.New()
 
-	_, err := db.New(cfg.Database)
+	db, err := db.New(cfg.Database)
 	if err != nil {
 		logger.Fatal("database initiation failed", zap.Error(err))
 	}
@@ -33,6 +35,13 @@ func main(cfg config.Config, logger *zap.Logger, tracer trace.Tracer) {
 	handler.Healthz{
 		Logger: logger.Named("handler").Named("healthz"),
 		Tracer: tracer,
+	}.Register(app.Group(""))
+
+	handler.User{
+		Store:  user.NewMongoUser(db, tracer),
+		Tracer: tracer,
+		Logger: logger.Named("handler").Named("user"),
+		JWT:    jwt.JWT{Config: cfg.JWT},
 	}.Register(app.Group(""))
 
 	if err := app.Start(":1378"); !errors.Is(err, http.ErrServerClosed) {
