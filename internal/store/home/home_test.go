@@ -44,6 +44,7 @@ func (suite *CommonHomeSuite) TestSetGet() {
 			home: model.Home{
 				ID:              "",
 				Title:           "127.0.0.1",
+				Owner:           "parham.alvani@gmail.com",
 				Location:        "Iran, Tehran",
 				Description:     "Home Sweet Home",
 				Peoples:         4,
@@ -75,6 +76,7 @@ func (suite *CommonHomeSuite) TestSetGet() {
 			home: model.Home{
 				ID:              "1378",
 				Title:           "127.0.0.1",
+				Owner:           "parham.alvani@gmail.com",
 				Location:        "Iran, Tehran",
 				Description:     "Home Sweet Home",
 				Peoples:         4,

@@ -17,6 +17,7 @@ type Photo struct {
 // Home represents a home to rent. contract types and room types are string to handle them more easier.
 type Home struct {
 	ID              string            `bson:"_id"`
+	Owner           string            `bson:"owner"`
 	Title           string            `bson:"title"`
 	Location        string            `bson:"location"`
 	Description     string            `bson:"description"`
