@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/1995parham/fandogh/internal/db"
 	"github.com/1995parham/fandogh/internal/fs"
+	"github.com/1995parham/fandogh/internal/http/jwt"
 	"github.com/1995parham/fandogh/internal/logger"
 	"github.com/1995parham/fandogh/internal/metric"
 	telemetry "github.com/1995parham/fandogh/internal/telemetry/config"
@@ -11,15 +12,6 @@ import (
 // Default return default configuration.
 func Default() Config {
 	return Config{
-		Logger: logger.Config{
-			Level: "debug",
-			Syslog: logger.Syslog{
-				Enabled: false,
-				Network: "",
-				Address: "",
-				Tag:     "",
-			},
-		},
 		Database: db.Config{
 			Name: "fandogh",
 			URL:  "mongodb://127.0.0.1:27017",
@@ -34,6 +26,15 @@ func Default() Config {
 			Address: ":8080",
 			Enabled: true,
 		},
+		Logger: logger.Config{
+			Level: "debug",
+			Syslog: logger.Syslog{
+				Enabled: false,
+				Network: "",
+				Address: "",
+				Tag:     "",
+			},
+		},
 		Telemetry: telemetry.Config{
 			Trace: telemetry.Trace{
 				Enabled: false,
@@ -42,6 +43,9 @@ func Default() Config {
 					Port: "6831",
 				},
 			},
+		},
+		JWT: jwt.Config{
+			AccessTokenSecret: "secret",
 		},
 	}
 }

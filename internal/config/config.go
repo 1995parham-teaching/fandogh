@@ -6,6 +6,7 @@ import (
 
 	"github.com/1995parham/fandogh/internal/db"
 	"github.com/1995parham/fandogh/internal/fs"
+	"github.com/1995parham/fandogh/internal/http/jwt"
 	"github.com/1995parham/fandogh/internal/logger"
 	"github.com/1995parham/fandogh/internal/metric"
 	telemetry "github.com/1995parham/fandogh/internal/telemetry/config"
@@ -29,6 +30,7 @@ type (
 		Monitoring  metric.Config    `koanf:"monitoring"`
 		Logger      logger.Config    `koanf:"logger"`
 		Telemetry   telemetry.Config `koanf:"telemetry"`
+		JWT         jwt.Config       `koanf:"jwt"`
 	}
 )
 
