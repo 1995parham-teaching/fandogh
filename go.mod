@@ -22,6 +22,8 @@ require (
 	github.com/tchap/zapext/v2 v2.1.0
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	go.mongodb.org/mongo-driver v1.5.3
+	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.21.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/go.mongodb.org/mongo-driver/mongo/otelmongo v0.21.0 // indirect
 	go.opentelemetry.io/otel v1.0.0-RC1
 	go.opentelemetry.io/otel/exporters/jaeger v1.0.0-RC1
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.0.0-RC1

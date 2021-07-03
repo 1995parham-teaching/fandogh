@@ -13,6 +13,7 @@ import (
 	"github.com/1995parham/fandogh/internal/metric"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/cobra"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 )
@@ -26,6 +27,8 @@ func main(cfg config.Config, logger *zap.Logger, tracer trace.Tracer) {
 	if err != nil {
 		logger.Fatal("database initiation failed", zap.Error(err))
 	}
+
+	app.Use(otelecho.Middleware("fandogh"))
 
 	handler.Healthz{
 		Logger: logger.Named("handler").Named("healthz"),
