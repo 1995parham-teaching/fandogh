@@ -3,7 +3,6 @@ package home
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
 	"errors"
 	"fmt"
 
@@ -69,9 +68,7 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 	}
 
 	for _, photo := range photos {
-		home.Photos[photo.Name] = fmt.Sprintf("%s_%s_%s",
-			base64.StdEncoding.EncodeToString([]byte(home.Owner)),
-			home.ID, photo.Name)
+		home.Photos[photo.Name] = fs.Generate(home.ID, photo.Name)
 
 		// nolint: exhaustivestruct
 		if _, err := s.Minio.PutObject(ctx, Bucket, home.Photos[photo.Name],
