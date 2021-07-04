@@ -6,7 +6,7 @@ import (
 
 	"github.com/1995parham/fandogh/internal/http/common"
 	"github.com/1995parham/fandogh/internal/model"
-	"github.com/golang-jwt/jwt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
