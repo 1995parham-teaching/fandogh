@@ -24,7 +24,7 @@ type User struct {
 
 // nolint: wrapcheck
 func (h User) Create(c echo.Context) error {
-	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.url.create")
+	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.user.create")
 	defer span.End()
 
 	var rq request.Register
@@ -63,7 +63,7 @@ func (h User) Create(c echo.Context) error {
 // Login checks given credentials and generate jwt token
 // nolint: wrapcheck
 func (h User) Login(c echo.Context) error {
-	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.url.login")
+	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.user.login")
 	defer span.End()
 
 	var rq request.Login
