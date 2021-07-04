@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/1995parham/fandogh/internal/http/common"
 	"github.com/1995parham/fandogh/internal/model"
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type Config struct {
@@ -15,6 +18,17 @@ type Config struct {
 
 type JWT struct {
 	Config
+}
+
+func (j JWT) Middleware() echo.MiddlewareFunc {
+	// nolint: exhaustivestruct
+	return middleware.JWTWithConfig(middleware.JWTConfig{
+		ContextKey:    common.UserContextKey,
+		SigningKey:    []byte(j.Config.AccessTokenSecret),
+		SigningMethod: jwt.SigningMethodHS256.Name,
+		Claims:        &jwt.StandardClaims{},
+		TokenLookup:   "header:Authorization",
+	})
 }
 
 // NewAccessToken creates new access token for given user.
