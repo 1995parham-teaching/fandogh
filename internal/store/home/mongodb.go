@@ -3,12 +3,12 @@ package home
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
 
 	"github.com/1995parham/fandogh/internal/fs"
 	"github.com/1995parham/fandogh/internal/model"
-	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -62,14 +62,17 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 		return ErrIDNotEmpty
 	}
 
-	home.ID = primitive.NewObjectID().String()
+	home.ID = primitive.NewObjectID().Hex()
 
 	if home.Photos == nil {
 		home.Photos = make(map[string]string)
 	}
 
 	for _, photo := range photos {
-		home.Photos[photo.Name] = uuid.New().String()
+		home.Photos[photo.Name] = fmt.Sprintf("%s_%s_%s",
+			base64.StdEncoding.EncodeToString([]byte(home.Owner)),
+			home.ID, photo.Name)
+
 		// nolint: exhaustivestruct
 		if _, err := s.Minio.PutObject(ctx, Bucket, home.Photos[photo.Name],
 			bytes.NewReader(photo.Content), int64(len(photo.Content)), minio.PutObjectOptions{
