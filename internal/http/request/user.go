@@ -44,7 +44,7 @@ func (r Login) Validate() error {
 		validation.Field(&r.Email, validation.Required, is.Email),
 		validation.Field(&r.Password, validation.Required, validation.Length(PasswordMinLength, PasswordMaxLength)),
 	); err != nil {
-		return fmt.Errorf("register request validation failed: %w", err)
+		return fmt.Errorf("login request validation failed: %w", err)
 	}
 
 	return nil
