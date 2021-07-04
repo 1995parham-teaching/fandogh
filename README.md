@@ -60,8 +60,8 @@ curl -vvv 127.0.0.1:1378/api/homes -X POST  -H 'Authorization: Bearer eyJhbGciOi
   "Contract": "good",
   "SecurityDeposit": 1000,
   "Photos": {
-    "1": "cGFyaGFtLmFsdmFuaUBnbWFpbC5jb20=_60e1535541e125c415973cd2_1",
-    "2": "cGFyaGFtLmFsdmFuaUBnbWFpbC5jb20=_60e1535541e125c415973cd2_2"
+    "1": "60e1535541e125c415973cd2_1",
+    "2": "60e1535541e125c415973cd2_2"
   },
   "Price": 100
 }
