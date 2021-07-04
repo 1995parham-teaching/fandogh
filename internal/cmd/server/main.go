@@ -9,9 +9,11 @@ import (
 
 	"github.com/1995parham/fandogh/internal/config"
 	"github.com/1995parham/fandogh/internal/db"
+	"github.com/1995parham/fandogh/internal/fs"
 	"github.com/1995parham/fandogh/internal/http/handler"
 	"github.com/1995parham/fandogh/internal/http/jwt"
 	"github.com/1995parham/fandogh/internal/metric"
+	"github.com/1995parham/fandogh/internal/store/home"
 	"github.com/1995parham/fandogh/internal/store/user"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/cobra"
@@ -23,12 +25,17 @@ import (
 func main(cfg config.Config, logger *zap.Logger, tracer trace.Tracer) {
 	metric.NewServer(cfg.Monitoring).Start(logger.Named("metrics"))
 
-	app := echo.New()
-
 	db, err := db.New(cfg.Database)
 	if err != nil {
 		logger.Fatal("database initiation failed", zap.Error(err))
 	}
+
+	mno, err := fs.New(cfg.FileStorage)
+	if err != nil {
+		logger.Fatal("file storage (minio) initiation failed", zap.Error(err))
+	}
+
+	app := echo.New()
 
 	app.Use(otelecho.Middleware("fandogh"))
 
@@ -37,12 +44,22 @@ func main(cfg config.Config, logger *zap.Logger, tracer trace.Tracer) {
 		Tracer: tracer,
 	}.Register(app.Group(""))
 
+	jh := jwt.JWT{Config: cfg.JWT}
+
 	handler.User{
 		Store:  user.NewMongoUser(db, tracer),
 		Tracer: tracer,
 		Logger: logger.Named("handler").Named("user"),
-		JWT:    jwt.JWT{Config: cfg.JWT},
+		JWT:    jh,
 	}.Register(app.Group(""))
+
+	api := app.Group("/api", jh.Middleware())
+
+	handler.Home{
+		Store:  home.NewMongoHome(db, mno, tracer),
+		Tracer: tracer,
+		Logger: logger.Named("handler").Named("home"),
+	}.Register(api)
 
 	if err := app.Start(":1378"); !errors.Is(err, http.ErrServerClosed) {
 		logger.Fatal("echo initiation failed", zap.Error(err))
