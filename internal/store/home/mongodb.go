@@ -70,7 +70,7 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 	for _, photo := range photos {
 		home.Photos[photo.Name] = fs.Generate(home.ID, photo.Name)
 
-		// nolint: exhaustivestruct
+		// nolint: exhaustruct
 		if _, err := s.Minio.PutObject(ctx, Bucket, home.Photos[photo.Name],
 			bytes.NewReader(photo.Content), int64(len(photo.Content)), minio.PutObjectOptions{
 				ContentType: photo.ContentType,

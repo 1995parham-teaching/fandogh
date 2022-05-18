@@ -24,7 +24,7 @@ func Execute() {
 
 	tracer := trace.New(cfg.Telemetry.Trace)
 
-	// nolint: exhaustivestruct
+	// nolint: exhaustruct
 	root := &cobra.Command{
 		Use:   "fandogh",
 		Short: "a server with login, user and etc.",

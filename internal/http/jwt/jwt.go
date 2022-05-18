@@ -21,7 +21,7 @@ type JWT struct {
 }
 
 func (j JWT) Middleware() echo.MiddlewareFunc {
-	// nolint: exhaustivestruct
+	// nolint: exhaustruct
 	return middleware.JWTWithConfig(middleware.JWTConfig{
 		ContextKey:    common.UserContextKey,
 		SigningKey:    []byte(j.Config.AccessTokenSecret),

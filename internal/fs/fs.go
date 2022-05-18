@@ -11,7 +11,7 @@ import (
 // New create a connection to minio to use as a file storage.
 func New(cfg Config) (*minio.Client, error) {
 	// initialize minio client object.
-	// nolint: exhaustivestruct
+	// nolint: exhaustruct
 	client, err := minio.New(cfg.Endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(cfg.AccessKey, cfg.SecretKey, ""),
 		Secure: cfg.UseSSL,
@@ -30,7 +30,7 @@ func Bucket(client *minio.Client, bucket string) error {
 	}
 
 	if !found {
-		// nolint: exhaustivestruct
+		// nolint: exhaustruct
 		if err := client.MakeBucket(context.Background(), bucket, minio.MakeBucketOptions{}); err != nil {
 			return fmt.Errorf("cannot make minio bucket [%s]: %w", bucket, err)
 		}
