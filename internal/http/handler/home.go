@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/1995parham-teaching/fandogh/internal/http/common"
@@ -88,7 +88,7 @@ func (h Home) New(c echo.Context) error {
 		}
 		defer fd.Close()
 
-		data, err := ioutil.ReadAll(fd)
+		data, err := io.ReadAll(fd)
 		if err != nil {
 			span.RecordError(err)
 
