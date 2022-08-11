@@ -1,14 +1,14 @@
-# Fandogh :chestnut:
+# Fandogh :chestnut
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/cng-by-example/fandogh/ci?label=ci&logo=github&style=flat-square)
-[![Codecov](https://img.shields.io/codecov/c/gh/cng-by-example/fandogh?logo=codecov&style=flat-square)](https://codecov.io/gh/cng-by-example/fandogh)
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/cng-by-example/fandogh)](https://pkg.go.dev/github.com/cng-by-example/fandogh)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/1995parham-teaching/fandogh/ci?label=ci&logo=github&style=flat-square)
+[![Codecov](https://img.shields.io/codecov/c/gh/1995parham-teaching/fandogh?logo=codecov&style=flat-square)](https://codecov.io/gh/1995parham-teaching/fandogh)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/1995parham-teaching/fandogh)](https://pkg.go.dev/github.com/1995parham-teaching/fandogh)
 
 ## APIs
 
 register
 
-```sh
+```bash
 curl 127.0.0.1:1378/register -X POST -d '{ "email": "parham.alvani@gmail.com", "name": "Parham Alvani", "password": "123456" }' -H 'Content-Type: application/json'
 ```
 
@@ -22,7 +22,7 @@ curl 127.0.0.1:1378/register -X POST -d '{ "email": "parham.alvani@gmail.com", "
 
 login:
 
-```sh
+```bash
 curl 127.0.0.1:1378/login -X POST -d '{ "email": "parham.alvani@gmail.com", "password": "123456" }' -H 'Content-Type: application/json'
 ```
 
@@ -37,7 +37,7 @@ curl 127.0.0.1:1378/login -X POST -d '{ "email": "parham.alvani@gmail.com", "pas
 
 new home:
 
-```sh
+```bash
 curl -vvv 127.0.0.1:1378/api/homes -X POST  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ1c2VyIiwiZXhwIjoxNjI1Mzc5MDE3LCJqdGkiOiI4NDRhMzQ4Yy03OGVjLTRlNTctODJhZi03YjU3NTNmNjk5ZjciLCJpYXQiOjE2MjUzNzU0MTcsImlzcyI6ImZhbmRvZ2giLCJuYmYiOjE2MjUzNzU0MTcsInN1YiI6InBhcmhhbS5hbHZhbmlAZ21haWwuY29tIn0.EZUWQ-sLP1ClA0vtK6vZEcQ4qf3ZaBm9VpFV6smEwUc' -F 'title=sweet' -F 'location=italy' -F 'description=a place to live' -F 'peoples=3' -F 'room=good' -F 'bed=single' -F 'rooms=4' -F'bathrooms=1' -F'contract=good' -F'price=100' -F'security_deposit=1000' -F'photos=1,2' -F'1=@1.png' -F'2=@2.png'
 ```
 
