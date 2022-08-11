@@ -28,12 +28,6 @@ func Default() Config {
 		},
 		Logger: logger.Config{
 			Level: "debug",
-			Syslog: logger.Syslog{
-				Enabled: false,
-				Network: "",
-				Address: "",
-				Tag:     "",
-			},
 		},
 		Telemetry: telemetry.Config{
 			Trace: telemetry.Trace{

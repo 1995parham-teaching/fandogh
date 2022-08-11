@@ -57,14 +57,14 @@ func (suite *UserSuite) TestBadRequest() {
 
 	{
 		w := httptest.NewRecorder()
-		req := httptest.NewRequest("POST", "/register", bytes.NewReader(b))
+		req := httptest.NewRequest(http.MethodPost, "/register", bytes.NewReader(b))
 
 		suite.engine.ServeHTTP(w, req)
 		require.Equal(http.StatusBadRequest, w.Code)
 	}
 	{
 		w := httptest.NewRecorder()
-		req := httptest.NewRequest("POST", "/login", bytes.NewReader(b))
+		req := httptest.NewRequest(http.MethodPost, "/login", bytes.NewReader(b))
 
 		suite.engine.ServeHTTP(w, req)
 		require.Equal(http.StatusBadRequest, w.Code)
@@ -113,7 +113,7 @@ func (suite *UserSuite) TestRegister() {
 			require.NoError(err)
 
 			w := httptest.NewRecorder()
-			req := httptest.NewRequest("POST", "/register", bytes.NewReader(b))
+			req := httptest.NewRequest(http.MethodPost, "/register", bytes.NewReader(b))
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 
 			suite.engine.ServeHTTP(w, req)
@@ -174,7 +174,7 @@ func (suite *UserSuite) TestLogin() {
 			require.NoError(err)
 
 			w := httptest.NewRecorder()
-			req := httptest.NewRequest("POST", "/login", bytes.NewReader(b))
+			req := httptest.NewRequest(http.MethodPost, "/login", bytes.NewReader(b))
 			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 
 			suite.engine.ServeHTTP(w, req)
