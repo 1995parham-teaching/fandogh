@@ -47,4 +47,4 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/cng-by-example/fandogh:latest
+            ghcr.io/1995parham-teaching/fandogh:latest

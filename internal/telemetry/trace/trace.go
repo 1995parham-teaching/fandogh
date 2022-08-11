@@ -3,7 +3,7 @@ package trace
 import (
 	"log"
 
-	"github.com/1995parham/fandogh/internal/telemetry/config"
+	"github.com/1995parham-teaching/fandogh/internal/telemetry/config"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	stdout "go.opentelemetry.io/otel/exporters/stdout/stdouttrace"

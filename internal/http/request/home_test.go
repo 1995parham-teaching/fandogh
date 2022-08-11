@@ -3,7 +3,7 @@ package request_test
 import (
 	"testing"
 
-	"github.com/1995parham/fandogh/internal/http/request"
+	"github.com/1995parham-teaching/fandogh/internal/http/request"
 )
 
 // nolint: funlen

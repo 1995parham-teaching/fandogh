@@ -3,11 +3,11 @@ package cmd
 import (
 	"os"
 
-	"github.com/1995parham/fandogh/internal/cmd/migrate"
-	"github.com/1995parham/fandogh/internal/cmd/server"
-	"github.com/1995parham/fandogh/internal/config"
-	"github.com/1995parham/fandogh/internal/logger"
-	"github.com/1995parham/fandogh/internal/telemetry/trace"
+	"github.com/1995parham-teaching/fandogh/internal/cmd/migrate"
+	"github.com/1995parham-teaching/fandogh/internal/cmd/server"
+	"github.com/1995parham-teaching/fandogh/internal/config"
+	"github.com/1995parham-teaching/fandogh/internal/logger"
+	"github.com/1995parham-teaching/fandogh/internal/telemetry/trace"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )

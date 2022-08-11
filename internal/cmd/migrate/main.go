@@ -3,9 +3,9 @@ package migrate
 import (
 	"context"
 
-	"github.com/1995parham/fandogh/internal/config"
-	"github.com/1995parham/fandogh/internal/db"
-	"github.com/1995parham/fandogh/internal/store/user"
+	"github.com/1995parham-teaching/fandogh/internal/config"
+	"github.com/1995parham-teaching/fandogh/internal/db"
+	"github.com/1995parham-teaching/fandogh/internal/store/user"
 	"github.com/spf13/cobra"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"

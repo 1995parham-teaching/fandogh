@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/1995parham/fandogh/internal/model"
+	"github.com/1995parham-teaching/fandogh/internal/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.opentelemetry.io/otel/trace"

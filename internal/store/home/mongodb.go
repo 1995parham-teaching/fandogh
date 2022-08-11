@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/1995parham/fandogh/internal/fs"
-	"github.com/1995parham/fandogh/internal/model"
+	"github.com/1995parham-teaching/fandogh/internal/fs"
+	"github.com/1995parham-teaching/fandogh/internal/model"
 	"github.com/minio/minio-go/v7"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

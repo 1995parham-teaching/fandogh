@@ -1,6 +1,6 @@
-module github.com/1995parham/fandogh
+module github.com/1995parham-teaching/fandogh
 
-go 1.16
+go 1.19
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect

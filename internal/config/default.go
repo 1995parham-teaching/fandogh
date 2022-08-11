@@ -1,12 +1,12 @@
 package config
 
 import (
-	"github.com/1995parham/fandogh/internal/db"
-	"github.com/1995parham/fandogh/internal/fs"
-	"github.com/1995parham/fandogh/internal/http/jwt"
-	"github.com/1995parham/fandogh/internal/logger"
-	"github.com/1995parham/fandogh/internal/metric"
-	telemetry "github.com/1995parham/fandogh/internal/telemetry/config"
+	"github.com/1995parham-teaching/fandogh/internal/db"
+	"github.com/1995parham-teaching/fandogh/internal/fs"
+	"github.com/1995parham-teaching/fandogh/internal/http/jwt"
+	"github.com/1995parham-teaching/fandogh/internal/logger"
+	"github.com/1995parham-teaching/fandogh/internal/metric"
+	telemetry "github.com/1995parham-teaching/fandogh/internal/telemetry/config"
 )
 
 // Default return default configuration.

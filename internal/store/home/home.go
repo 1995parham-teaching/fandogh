@@ -3,7 +3,7 @@ package home
 import (
 	"context"
 
-	"github.com/1995parham/fandogh/internal/model"
+	"github.com/1995parham-teaching/fandogh/internal/model"
 )
 
 // Home stores the home model into the database and minio. we use minio for storing the image files of each home.
