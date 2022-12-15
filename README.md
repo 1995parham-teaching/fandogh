@@ -1,6 +1,6 @@
 # Fandogh :chestnut
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/1995parham-teaching/fandogh/ci?label=ci&logo=github&style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/1995parham-teaching/fandogh/ci.yaml?label=ci&logo=github&style=flat-square&branch=main)
 [![Codecov](https://img.shields.io/codecov/c/gh/1995parham-teaching/fandogh?logo=codecov&style=flat-square)](https://codecov.io/gh/1995parham-teaching/fandogh)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/1995parham-teaching/fandogh)](https://pkg.go.dev/github.com/1995parham-teaching/fandogh)
 
