@@ -49,7 +49,7 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 	ctx, span := s.Tracer.Start(ctx, "store.home.set")
 	defer span.End()
 
-	if err := fs.Bucket(s.Minio, Bucket); err != nil {
+	if err := fs.Bucket(ctx, s.Minio, Bucket); err != nil {
 		span.RecordError(ErrIDNotEmpty)
 
 		return fmt.Errorf("minio bucket creation/checking failed: %w", err)
