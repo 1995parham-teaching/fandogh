@@ -14,9 +14,9 @@ const (
 
 // Register represents a register request payload.
 type Register struct {
-	Name     string
-	Email    string
-	Password string
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 // Validate register request payload.
