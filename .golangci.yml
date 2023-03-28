@@ -14,3 +14,8 @@ linters:
     - interfacer
     - exhaustivestruct
     - ireturn
+    - varcheck
+    - structcheck
+    - nosnakecase
+    - ifshort
+    - deadcode
