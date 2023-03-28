@@ -16,7 +16,7 @@ func NewMemoryUser() *MemoryUser {
 	}
 }
 
-func (m MemoryUser) Set(ctx context.Context, user model.User) error {
+func (m MemoryUser) Set(_ context.Context, user model.User) error {
 	if _, ok := m.store[user.Email]; ok {
 		return ErrEmailDuplicate
 	}
@@ -26,7 +26,7 @@ func (m MemoryUser) Set(ctx context.Context, user model.User) error {
 	return nil
 }
 
-func (m MemoryUser) Get(ctx context.Context, email string) (model.User, error) {
+func (m MemoryUser) Get(_ context.Context, email string) (model.User, error) {
 	user, ok := m.store[email]
 	if ok {
 		return user, nil
