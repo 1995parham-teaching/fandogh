@@ -26,7 +26,7 @@ func (j JWT) Middleware() echo.MiddlewareFunc {
 		ContextKey:    common.UserContextKey,
 		SigningKey:    []byte(j.AccessTokenSecret),
 		SigningMethod: jwt.SigningMethodHS256.Name,
-		NewClaimsFunc: func(_ echo.Context) jwt.Claims { return new(jwt.StandardClaims) },
+		NewClaimsFunc: func(_ echo.Context) jwt.Claims { return new(jwt.RegisteredClaims) },
 		TokenLookup:   "header:Authorization",
 	})
 }
@@ -34,13 +34,13 @@ func (j JWT) Middleware() echo.MiddlewareFunc {
 // NewAccessToken creates new access token for given user.
 func (j JWT) NewAccessToken(u model.User) (string, error) {
 	// create token
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		Audience:  "user",
-		ExpiresAt: time.Now().Add(1 * time.Hour).Unix(),
-		Id:        uuid.New().String(),
-		IssuedAt:  time.Now().Unix(),
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
+		Audience:  jwt.ClaimStrings{"user"},
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
+		ID:        uuid.New().String(),
+		IssuedAt:  jwt.NewNumericDate(time.Now()),
 		Issuer:    "fandogh",
-		NotBefore: time.Now().Unix(),
+		NotBefore: jwt.NewNumericDate(time.Now()),
 		Subject:   u.Email,
 	})
 
