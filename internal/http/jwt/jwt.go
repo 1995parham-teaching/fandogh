@@ -6,10 +6,10 @@ import (
 
 	"github.com/1995parham-teaching/fandogh/internal/http/common"
 	"github.com/1995parham-teaching/fandogh/internal/model"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
+	"github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 type Config struct {
@@ -22,11 +22,11 @@ type JWT struct {
 
 func (j JWT) Middleware() echo.MiddlewareFunc {
 	// nolint: exhaustruct
-	return middleware.JWTWithConfig(middleware.JWTConfig{
+	return echojwt.WithConfig(echojwt.Config{
 		ContextKey:    common.UserContextKey,
-		SigningKey:    []byte(j.Config.AccessTokenSecret),
+		SigningKey:    []byte(j.AccessTokenSecret),
 		SigningMethod: jwt.SigningMethodHS256.Name,
-		Claims:        &jwt.StandardClaims{},
+		NewClaimsFunc: func(_ echo.Context) jwt.Claims { return new(jwt.StandardClaims) },
 		TokenLookup:   "header:Authorization",
 	})
 }
