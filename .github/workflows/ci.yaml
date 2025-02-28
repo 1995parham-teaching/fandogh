@@ -7,12 +7,12 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
-          go-version: 1.19
+          go-version-file: go.mod
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v4
         with:
           version: latest
           args: --enable-all
@@ -20,14 +20,14 @@ jobs:
     name: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.19
       - run: cd deployments && docker-compose up -d
       - run: cd cmd/fandogh && go run main.go migrate
       - run: go test -v ./... -covermode=atomic -coverprofile=coverage.out
-      - uses: codecov/codecov-action@v1
+      - uses: codecov/codecov-action@v4
         with:
           files: coverage.out
   docker:
