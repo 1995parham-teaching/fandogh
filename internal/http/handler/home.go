@@ -8,7 +8,7 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/http/request"
 	"github.com/1995parham-teaching/fandogh/internal/model"
 	"github.com/1995parham-teaching/fandogh/internal/store/home"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
@@ -42,14 +42,9 @@ func (h Home) New(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	token, ok := c.Get(common.UserContextKey).(*jwt.Token)
+	mc, ok := c.Get(common.UserContextKey).(*jwt.Token)
 	if !ok {
-		return echo.NewHTTPError(http.StatusUnauthorized)
-	}
-
-	claims, ok := token.Claims.(*jwt.StandardClaims)
-	if !ok {
-		return echo.NewHTTPError(http.StatusUnauthorized)
+		return echo.NewHTTPError(http.StatusBadRequest, "user claims not found")
 	}
 
 	var bed model.Bed
@@ -102,9 +97,15 @@ func (h Home) New(c echo.Context) error {
 		}
 	}
 
+	// Get the subject from the token
+	sub, err := mc.Claims.GetSubject()
+	if err != nil {
+		span.RecordError(err)
+		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
+	}
 	m := model.Home{
 		ID:              "",
-		Owner:           claims.Subject,
+		Owner:           sub,
 		Title:           rq.Title,
 		Location:        rq.Location,
 		Description:     rq.Description,

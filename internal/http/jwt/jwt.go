@@ -6,7 +6,7 @@ import (
 
 	"github.com/1995parham-teaching/fandogh/internal/http/common"
 	"github.com/1995parham-teaching/fandogh/internal/model"
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
@@ -27,7 +27,6 @@ func (j JWT) Middleware() echo.MiddlewareFunc {
 		SigningKey:    []byte(j.AccessTokenSecret),
 		SigningMethod: jwt.SigningMethodHS256.Name,
 		NewClaimsFunc: func(_ echo.Context) jwt.Claims { return new(jwt.RegisteredClaims) },
-		TokenLookup:   "header:Authorization",
 	})
 }
 
