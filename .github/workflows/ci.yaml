@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
-      - run: cd deployments && docker-compose up -d
+      - run: cd deployments && docker compose up -d
       - run: cd cmd/fandogh && go run main.go migrate
       - run: go test -v ./... -covermode=atomic -coverprofile=coverage.out
       - uses: codecov/codecov-action@v4
