@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.opentelemetry.io/otel/trace"
+	"go.opentelemetry.io/otel/trace/noop"
 )
 
 type CommonHomeSuite struct {
@@ -144,7 +144,7 @@ func (suite *MongoHomeSuite) SetupSuite() {
 	suite.Require().NoError(err)
 
 	suite.DB = db
-	suite.Store = home.NewMongoHome(db, minio, trace.NewNoopTracerProvider().Tracer(""))
+	suite.Store = home.NewMongoHome(db, minio, noop.NewTracerProvider().Tracer(""))
 }
 
 func (suite *MongoHomeSuite) TearDownSuite() {

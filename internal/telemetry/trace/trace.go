@@ -1,11 +1,12 @@
 package trace
 
 import (
+	"context"
 	"log"
 
 	"github.com/1995parham-teaching/fandogh/internal/telemetry/config"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	stdout "go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
@@ -22,8 +23,9 @@ func New(cfg config.Trace) trace.Tracer {
 			stdout.WithPrettyPrint(),
 		)
 	} else {
-		exporter, err = jaeger.New(
-			jaeger.WithAgentEndpoint(jaeger.WithAgentHost(cfg.Agent.Host), jaeger.WithAgentPort(cfg.Agent.Port)),
+		exporter, err = otlptracegrpc.New(
+			context.Background(),
+			otlptracegrpc.WithEndpoint(cfg.Agent), otlptracegrpc.WithInsecure(),
 		)
 	}
 

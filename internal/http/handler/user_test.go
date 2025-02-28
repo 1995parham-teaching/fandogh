@@ -15,7 +15,7 @@ import (
 	store "github.com/1995parham-teaching/fandogh/internal/store/user"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/suite"
-	"go.opentelemetry.io/otel/trace"
+	"go.opentelemetry.io/otel/trace/noop"
 	"go.uber.org/zap"
 )
 
@@ -33,7 +33,7 @@ func (suite *UserSuite) SetupSuite() {
 	user := handler.User{
 		Store:  suite.store,
 		Logger: zap.NewNop(),
-		Tracer: trace.NewNoopTracerProvider().Tracer(""),
+		Tracer: noop.NewTracerProvider().Tracer(""),
 		JWT: jwt.JWT{
 			Config: jwt.Config{
 				AccessTokenSecret: "secret",

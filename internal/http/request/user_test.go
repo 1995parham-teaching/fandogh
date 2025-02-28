@@ -17,7 +17,10 @@ func TestRegisterValidation(t *testing.T) {
 		isValid  bool
 	}{
 		{
-			isValid: false,
+			isValid:  false,
+			name:     "",
+			password: "",
+			email:    "",
 		},
 		{
 			name:     "Parham Alvani",
@@ -91,7 +94,9 @@ func TestLoginValidation(t *testing.T) {
 		isValid  bool
 	}{
 		{
-			isValid: false,
+			isValid:  false,
+			password: "",
+			email:    "",
 		},
 		{
 			password: "1234567",

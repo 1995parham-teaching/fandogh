@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.opentelemetry.io/otel/trace"
+	"go.opentelemetry.io/otel/trace/noop"
 )
 
 type CommonUserSuite struct {
@@ -85,7 +85,7 @@ func (suite *MongoUserSuite) SetupSuite() {
 	suite.Require().NoError(err)
 
 	suite.DB = db
-	suite.Store = user.NewMongoUser(db, trace.NewNoopTracerProvider().Tracer(""))
+	suite.Store = user.NewMongoUser(db, noop.NewTracerProvider().Tracer(""))
 }
 
 func (suite *MongoUserSuite) TearDownSuite() {

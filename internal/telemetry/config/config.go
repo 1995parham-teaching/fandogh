@@ -5,11 +5,6 @@ type Config struct {
 }
 
 type Trace struct {
-	Enabled bool `koanf:"enabled"`
-	Agent   `koanf:"agent"`
-}
-
-type Agent struct {
-	Host string `koanf:"host"`
-	Port string `koanf:"port"`
+	Enabled bool   `koanf:"enabled"`
+	Agent   string `koanf:"agent"`
 }
