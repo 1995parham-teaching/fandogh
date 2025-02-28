@@ -101,8 +101,10 @@ func (h Home) New(c echo.Context) error {
 	sub, err := mc.Claims.GetSubject()
 	if err != nil {
 		span.RecordError(err)
+
 		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 	}
+
 	m := model.Home{
 		ID:              "",
 		Owner:           sub,

@@ -8,21 +8,21 @@ import (
 
 // NewHome contains the home creation request payload.
 type NewHome struct {
-	Title           string `form:"title" json:"title"`
-	Location        string `form:"location" json:"location"`
-	Description     string `form:"description" json:"description"`
-	Peoples         int    `form:"peoples" json:"peoples"`
-	Room            string `form:"room" json:"room"`
-	Bed             string `form:"bed" json:"bed"`
-	Rooms           int    `form:"rooms" json:"rooms"`
-	Bathrooms       int    `form:"bathrooms" json:"bathrooms"`
-	Smoking         bool   `form:"smoking" json:"smoking"`
-	Guest           bool   `form:"guest" json:"guest"`
-	Pet             bool   `form:"pet" json:"pet"`
-	BillsIncluded   bool   `form:"bills_included" json:"bills_included"`
-	Contract        string `form:"contract" json:"contract"`
+	Title           string `form:"title"            json:"title"`
+	Location        string `form:"location"         json:"location"`
+	Description     string `form:"description"      json:"description"`
+	Peoples         int    `form:"peoples"          json:"peoples"`
+	Room            string `form:"room"             json:"room"`
+	Bed             string `form:"bed"              json:"bed"`
+	Rooms           int    `form:"rooms"            json:"rooms"`
+	Bathrooms       int    `form:"bathrooms"        json:"bathrooms"`
+	Smoking         bool   `form:"smoking"          json:"smoking"`
+	Guest           bool   `form:"guest"            json:"guest"`
+	Pet             bool   `form:"pet"              json:"pet"`
+	BillsIncluded   bool   `form:"bills_included"   json:"bills_included"`
+	Contract        string `form:"contract"         json:"contract"`
 	SecurityDeposit int    `form:"security_deposit" json:"security_deposit"`
-	Price           int    `form:"price" json:"price"`
+	Price           int    `form:"price"            json:"price"`
 }
 
 // Validate home creation request payload.

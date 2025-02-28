@@ -107,7 +107,6 @@ func (suite *UserSuite) TestRegister() {
 	}
 
 	for _, c := range cases {
-		c := c
 		suite.Run(c.name, func() {
 			b, err := json.Marshal(c.register)
 			require.NoError(err)
@@ -168,7 +167,6 @@ func (suite *UserSuite) TestLogin() {
 	}
 
 	for _, c := range cases {
-		c := c
 		suite.Run(c.name, func() {
 			b, err := json.Marshal(c.login)
 			require.NoError(err)

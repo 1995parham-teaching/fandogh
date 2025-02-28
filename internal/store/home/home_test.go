@@ -106,19 +106,21 @@ func (suite *CommonHomeSuite) TestSetGet() {
 	}
 
 	for _, c := range cases {
-		c := c
 		suite.Run(c.name, func() {
 			require.Equal(c.expectedSetErr, suite.Store.Set(context.Background(), &c.home, c.photos))
+
 			if c.expectedSetErr == nil {
 				require.NotEmpty(c.home.ID)
 
 				require.NotNil(c.home.Photos)
+
 				for _, key := range c.home.Photos {
 					require.NotEmpty(key)
 				}
 
 				home, err := suite.Store.Get(context.Background(), c.home.ID)
 				require.Equal(c.expectedGetErr, err)
+
 				if c.expectedGetErr == nil {
 					require.Equal(c.home, home)
 				}

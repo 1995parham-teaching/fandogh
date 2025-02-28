@@ -77,7 +77,7 @@ func Register(root *cobra.Command, cfg config.Config, logger *zap.Logger, tracer
 		&cobra.Command{
 			Use:   "server",
 			Short: "Run server to serve the requests",
-			Run: func(cmd *cobra.Command, args []string) {
+			Run: func(_ *cobra.Command, _ []string) {
 				main(cfg, logger, tracer)
 			},
 		},

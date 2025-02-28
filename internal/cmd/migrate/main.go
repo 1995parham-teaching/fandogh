@@ -41,7 +41,7 @@ func Register(root *cobra.Command, cfg config.Config, logger *zap.Logger) {
 		&cobra.Command{
 			Use:   "migrate",
 			Short: "Setup database indices",
-			Run: func(cmd *cobra.Command, args []string) {
+			Run: func(_ *cobra.Command, _ []string) {
 				main(cfg, logger)
 			},
 		},
