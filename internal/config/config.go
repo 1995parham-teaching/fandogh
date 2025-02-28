@@ -45,7 +45,7 @@ func New() Config {
 		log.Fatalf("error loading default: %s", err)
 	}
 
-	// load configuration from file
+	// load configuration from our custom config example in here
 	if err := k.Load(file.Provider("configs/config.example.yml"), yaml.Parser()); err != nil {
 		log.Printf("error loading config.yml: %s", err)
 	}
