@@ -15,24 +15,19 @@ const connectionTimeout = 10 * time.Second
 
 // New creates a new mongodb connection and tests it.
 func New(cfg Config) (*mongo.Database, error) {
-	// create mongodb connection
-	client, err := mongo.NewClient(
+	// connect to the mongodb
+	ctx, done := context.WithTimeout(context.Background(), connectionTimeout)
+	defer done()
+
+	client, err := mongo.Connect(
+		ctx,
 		options.Client().ApplyURI(cfg.URL),
 		options.Client().SetMonitor(otelmongo.NewMonitor()),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("db new client error: %w", err)
+		return nil, fmt.Errorf("db connection error: %w", err)
 	}
 
-	// connect to the mongodb
-	{
-		ctx, done := context.WithTimeout(context.Background(), connectionTimeout)
-		defer done()
-
-		if err := client.Connect(ctx); err != nil {
-			return nil, fmt.Errorf("db connection error: %w", err)
-		}
-	}
 	// ping the mongodb
 	{
 		ctx, done := context.WithTimeout(context.Background(), connectionTimeout)
