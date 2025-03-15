@@ -15,7 +15,7 @@ type OPA struct {
 
 func (opa OPA) Middleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func (c echo.Context) error {
+		return func(c echo.Context) error {
 			mc, ok := c.Get(common.UserContextKey).(*jwt.Token)
 			if !ok {
 				return echo.NewHTTPError(http.StatusBadRequest, "user claims not found")
