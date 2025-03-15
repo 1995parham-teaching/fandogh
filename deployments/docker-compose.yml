@@ -1,6 +1,11 @@
 ---
 version: "3"
 services:
+  opa:
+    image: openpolicyagent/opa
+    ports:
+      - 8181:8181
+    command: run --server --log-level debug --addr=0.0.0.0:8181
   database:
     image: mongo:latest
     ports:
