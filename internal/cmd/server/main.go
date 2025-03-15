@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"os"
@@ -12,10 +13,12 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/fs"
 	"github.com/1995parham-teaching/fandogh/internal/http/handler"
 	"github.com/1995parham-teaching/fandogh/internal/http/jwt"
+	"github.com/1995parham-teaching/fandogh/internal/http/opa"
 	"github.com/1995parham-teaching/fandogh/internal/metric"
 	"github.com/1995parham-teaching/fandogh/internal/store/home"
 	"github.com/1995parham-teaching/fandogh/internal/store/user"
 	"github.com/labstack/echo/v4"
+	"github.com/open-policy-agent/opa/v1/sdk"
 	"github.com/spf13/cobra"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
 	"go.opentelemetry.io/otel/trace"
@@ -53,7 +56,16 @@ func main(cfg config.Config, logger *zap.Logger, tracer trace.Tracer) {
 		JWT:    jh,
 	}.Register(app.Group(""))
 
-	api := app.Group("/api", jh.Middleware())
+	eng, err := sdk.New(context.Background(), sdk.Options{})
+	if err != nil {
+		logger.Fatal("opa engine creation failed")
+	}
+
+	oh := opa.OPA{
+		Engine: eng,
+	}
+
+	api := app.Group("/api", jh.Middleware(), oh.Middleware())
 
 	handler.Home{
 		Store:  home.NewMongoHome(db, mno, tracer),
