@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"errors"
 	"net/http"
 	"os"
@@ -18,7 +17,6 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/store/home"
 	"github.com/1995parham-teaching/fandogh/internal/store/user"
 	"github.com/labstack/echo/v4"
-	"github.com/open-policy-agent/opa/v1/sdk"
 	"github.com/spf13/cobra"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
 	"go.opentelemetry.io/otel/trace"
@@ -56,13 +54,9 @@ func main(cfg config.Config, logger *zap.Logger, tracer trace.Tracer) {
 		JWT:    jh,
 	}.Register(app.Group(""))
 
-	eng, err := sdk.New(context.Background(), sdk.Options{})
+	oh, err := opa.New()
 	if err != nil {
-		logger.Fatal("opa engine creation failed")
-	}
-
-	oh := opa.OPA{
-		Engine: eng,
+		logger.Fatal("OPA engine creation failed", zap.Error(err))
 	}
 
 	api := app.Group("/api", jh.Middleware(), oh.Middleware())

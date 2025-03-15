@@ -1,6 +1,8 @@
 package opa
 
 import (
+	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/1995parham-teaching/fandogh/internal/http/common"
@@ -10,7 +12,22 @@ import (
 )
 
 type OPA struct {
-	Engine *sdk.OPA
+	engine *sdk.OPA
+}
+
+func New() (OPA, error) {
+	eng, err := sdk.New(context.Background(), sdk.Options{
+
+	})
+	if err != nil {
+		return OPA{
+			engine: nil,
+		}, fmt.Errorf("failed to create opa engine %w", err)
+	}
+
+	return OPA{
+		engine: eng,
+	}, nil
 }
 
 func (opa OPA) Middleware() echo.MiddlewareFunc {
@@ -26,9 +43,9 @@ func (opa OPA) Middleware() echo.MiddlewareFunc {
 				return echo.NewHTTPError(http.StatusBadRequest, "user claims subject not found")
 			}
 
-			allow, err := opa.Engine.Decision(
+			allow, err := opa.engine.Decision(
 				c.Request().Context(),
-				sdk.DecisionOptions{
+				sdk.DecisionOptions{ // nolint: exhaustruct
 					Path: "/authz/allow",
 					Input: map[string]any{
 						"subject": sub,
