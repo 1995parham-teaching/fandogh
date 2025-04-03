@@ -12,10 +12,9 @@ jobs:
         with:
           go-version-file: go.mod
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v4
+        uses: golangci/golangci-lint-action@v7
         with:
           version: latest
-          args: --enable-all
   test:
     name: test
     runs-on: ubuntu-latest
