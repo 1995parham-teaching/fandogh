@@ -10,3 +10,4 @@ linters:
     - tagliatelle
     - depguard
     - revive
+    - ireturn

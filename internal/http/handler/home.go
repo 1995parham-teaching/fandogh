@@ -81,7 +81,10 @@ func (h Home) New(c echo.Context) error {
 
 			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
-		defer fd.Close()
+
+		defer func() {
+			_ = fd.Close()
+		}()
 
 		data, err := io.ReadAll(fd)
 		if err != nil {

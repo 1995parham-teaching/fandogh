@@ -16,8 +16,7 @@ type OPA struct {
 }
 
 func New() (OPA, error) {
-	eng, err := sdk.New(context.Background(), sdk.Options{
-
+	eng, err := sdk.New(context.Background(), sdk.Options{ // nolint: exhaustruct
 	})
 	if err != nil {
 		return OPA{
