@@ -9,7 +9,7 @@ require (
 	github.com/knadh/koanf v1.5.0
 	github.com/labstack/echo-jwt/v4 v4.3.1
 	github.com/labstack/echo/v4 v4.13.3
-	github.com/minio/minio-go/v7 v7.0.90
+	github.com/minio/minio-go/v7 v7.0.91
 	github.com/open-policy-agent/opa v1.3.0
 	github.com/prometheus/client_golang v1.22.0
 	github.com/spf13/cobra v1.9.1
