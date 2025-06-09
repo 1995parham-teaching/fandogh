@@ -10,7 +10,7 @@ require (
 	github.com/labstack/echo-jwt/v4 v4.3.1
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/minio/minio-go/v7 v7.0.92
-	github.com/open-policy-agent/opa v1.5.0
+	github.com/open-policy-agent/opa v1.5.1
 	github.com/prometheus/client_golang v1.22.0
 	github.com/spf13/cobra v1.9.1
 	github.com/stretchr/testify v1.10.0
