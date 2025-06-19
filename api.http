@@ -1,0 +1,41 @@
+### create_user
+
+# Create a new user
+POST 127.0.0.1:1378/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "parham.alvani@gmail.com",
+  "password": "123456",
+  "name": "Parham Alvani"
+}
+
+### login
+
+# Login
+POST 127.0.0.1:1378/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "parham.alvani@gmail.com",
+  "password": "123456"
+}
+
+### new_house
+
+# Create a new house
+POST 127.0.0.1:1378/api/homes HTTP/1.1
+Authorization: Bearer {{login.response.body.accessToken}}
+Content-Type: application/x-www-form-urlencoded
+
+title=sweet&
+location=italy&
+description=a place to live&
+peoples=3&
+room=good&
+bed=single&
+rooms=4&
+bathrooms=1&
+contract=good&
+price=100&
+security_deposit=1000
