@@ -4,11 +4,15 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
+	"strings"
 
-	"github.com/1995parham-teaching/fandogh/internal/http/common"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"github.com/open-policy-agent/opa/v1/sdk"
+	sdktest "github.com/open-policy-agent/opa/v1/sdk/test"
+
+	"github.com/1995parham-teaching/fandogh/internal/http/common"
 )
 
 type OPA struct {
@@ -16,7 +20,44 @@ type OPA struct {
 }
 
 func New() (OPA, error) {
+	policyBytes, err := os.ReadFile("policy.rego")
+	if err != nil {
+		return OPA{ engine: nil}, fmt.Errorf("failed to read policy file: %w", err)
+	}
+
+	policy := string(policyBytes)
+
+	// create a mock HTTP bundle server (in production it should be on its server)
+	server, err := sdktest.NewServer(sdktest.MockBundle("/bundles/bundle.tar.gz", map[string]string{
+		"example.rego": policy,
+	}))
+	if err != nil {
+		return OPA{ engine: nil}, fmt.Errorf("failed to run opa test server: %w", err)
+	}
+
+	// provide the OPA configuration which specifies
+	// fetching policy bundles from the mock server
+	// and logging decisions locally to the console
+	config := fmt.Sprintf(`{
+		"services": {
+			"test": {
+				"url": %q
+			}
+		},
+		"bundles": {
+			"test": {
+				"resource": "/bundles/bundle.tar.gz"
+			}
+		},
+		"decision_logs": {
+			"console": true
+		}
+	}`, server.URL())
+
 	eng, err := sdk.New(context.Background(), sdk.Options{ // nolint: exhaustruct
+		ID:     "opa-test-1",
+		Config: strings.NewReader(config),
+		Ready: make(chan struct{}),
 	})
 	if err != nil {
 		return OPA{
@@ -42,12 +83,14 @@ func (opa OPA) Middleware() echo.MiddlewareFunc {
 				return echo.NewHTTPError(http.StatusBadRequest, "user claims subject not found")
 			}
 
-			allow, err := opa.engine.Decision(
+			result, err := opa.engine.Decision(
 				c.Request().Context(),
 				sdk.DecisionOptions{ // nolint: exhaustruct
 					Path: "/authz/allow",
 					Input: map[string]any{
+						"method": c.Request().Method,
 						"subject": sub,
+						"path": c.Path(),
 					},
 				},
 			)
@@ -55,16 +98,7 @@ func (opa OPA) Middleware() echo.MiddlewareFunc {
 				return echo.ErrForbidden
 			}
 
-			obj, ok := allow.Result.(map[string]any)
-			if !ok {
-				return echo.NewHTTPError(http.StatusForbidden, "policy validation failed")
-			}
-
-			if access, ok := obj["allow"].(bool); !ok || !access {
-				if body, ok := obj["body"].(string); ok {
-					return echo.NewHTTPError(http.StatusForbidden, body)
-				}
-
+			if decision, ok := result.Result.(bool); !ok || !decision {
 				return echo.NewHTTPError(http.StatusForbidden, "policy validation failed")
 			}
 
