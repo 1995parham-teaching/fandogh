@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	"github.com/1995parham-teaching/fandogh/internal/model"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -18,7 +18,7 @@ var (
 	ErrEmailDuplicate = errors.New("given email exists")
 )
 
-// MongoURL communicate with users collection in MongoDB.
+// MongoUser communicate with users collection in MongoDB.
 type MongoUser struct {
 	DB     *mongo.Database
 	Tracer trace.Tracer

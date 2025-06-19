@@ -9,9 +9,8 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/fs"
 	"github.com/1995parham-teaching/fandogh/internal/model"
 	"github.com/minio/minio-go/v7"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -20,7 +19,7 @@ var (
 	ErrIDNotEmpty = errors.New("home id must be empty")
 )
 
-// MongoURL communicate with homes collection in MongoDB.
+// MongoHome communicate with homes collection in MongoDB.
 type MongoHome struct {
 	DB     *mongo.Database
 	Minio  *minio.Client
@@ -61,7 +60,7 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 		return ErrIDNotEmpty
 	}
 
-	home.ID = primitive.NewObjectID().Hex()
+	home.ID = bson.NewObjectID().Hex()
 
 	if home.Photos == nil {
 		home.Photos = make(map[string]string)

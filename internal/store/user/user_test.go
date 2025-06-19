@@ -9,8 +9,8 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/model"
 	"github.com/1995parham-teaching/fandogh/internal/store/user"
 	"github.com/stretchr/testify/suite"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.opentelemetry.io/otel/trace/noop"
 )
 
