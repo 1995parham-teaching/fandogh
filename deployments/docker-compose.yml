@@ -1,5 +1,4 @@
 ---
-version: "3"
 services:
   opa:
     image: openpolicyagent/opa
@@ -19,11 +18,11 @@ services:
       - 9000:9000
     command: server /data
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/jaeger:latest
     ports:
-      - target: 6831
-        published: 6831
-        protocol: udp
+      - target: 4317
+        published: 4317
+        protocol: tcp
       - target: 16686
         published: 16686
         protocol: tcp
