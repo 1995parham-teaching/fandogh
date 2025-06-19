@@ -20,10 +20,10 @@ type Home struct {
 	Logger *zap.Logger
 }
 
-// nolint: wrapcheck, funlen, cyclop
 // New create a home based on user request. unlike the other requests this request uses form.
 // this request can contains many files as home images.
 // please note that the maximum size of each home creation request is 10MB.
+// nolint: wrapcheck, funlen, cyclop
 func (h Home) New(c echo.Context) error {
 	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.home.create")
 	defer span.End()

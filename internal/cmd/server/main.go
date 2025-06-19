@@ -37,6 +37,7 @@ func main(cfg config.Config, logger *zap.Logger, tracer trace.Tracer) {
 	}
 
 	app := echo.New()
+	app.Debug = true
 
 	app.Use(otelecho.Middleware("fandogh"))
 

@@ -26,7 +26,6 @@ func (j JWT) Middleware() echo.MiddlewareFunc {
 		ContextKey:    common.UserContextKey,
 		SigningKey:    []byte(j.AccessTokenSecret),
 		SigningMethod: jwt.SigningMethodHS256.Name,
-		NewClaimsFunc: func(_ echo.Context) jwt.Claims { return new(jwt.RegisteredClaims) },
 	})
 }
 
