@@ -48,7 +48,8 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 	ctx, span := s.Tracer.Start(ctx, "store.home.set")
 	defer span.End()
 
-	if err := fs.Bucket(ctx, s.Minio, Bucket); err != nil {
+	err := fs.Bucket(ctx, s.Minio, Bucket)
+	if err != nil {
 		span.RecordError(ErrIDNotEmpty)
 
 		return fmt.Errorf("minio bucket creation/checking failed: %w", err)
@@ -70,10 +71,11 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 		home.Photos[photo.Name] = fs.Generate(home.ID, photo.Name)
 
 		// nolint: exhaustruct
-		if _, err := s.Minio.PutObject(ctx, Bucket, home.Photos[photo.Name],
+		_, err = s.Minio.PutObject(ctx, Bucket, home.Photos[photo.Name],
 			bytes.NewReader(photo.Content), int64(len(photo.Content)), minio.PutObjectOptions{
 				ContentType: photo.ContentType,
-			}); err != nil {
+			})
+		if err != nil {
 			span.RecordError(err)
 
 			return fmt.Errorf("minio object creation failed: %w", err)
@@ -82,7 +84,8 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 
 	users := s.DB.Collection(Collection)
 
-	if _, err := users.InsertOne(ctx, home); err != nil {
+	_, err = users.InsertOne(ctx, home)
+	if err != nil {
 		span.RecordError(err)
 
 		return fmt.Errorf("mongodb failed: %w", err)
@@ -101,7 +104,9 @@ func (s *MongoHome) Get(ctx context.Context, id string) (model.Home, error) {
 	})
 
 	var home model.Home
-	if err := record.Decode(&home); err != nil {
+
+	err := record.Decode(&home)
+	if err != nil {
 		span.RecordError(err)
 
 		if errors.Is(err, mongo.ErrNoDocuments) {

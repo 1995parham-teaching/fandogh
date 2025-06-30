@@ -78,7 +78,6 @@ func TestNewHomeValidation(t *testing.T) {
 
 	for _, c := range cases {
 		err := c.rq.Validate()
-
 		if c.isValid && err != nil {
 			t.Fatalf("valid request %+v has error %s", c.rq, err)
 		}

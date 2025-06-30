@@ -16,6 +16,7 @@ import (
 
 type CommonUserSuite struct {
 	suite.Suite
+
 	Store user.User
 }
 
@@ -74,8 +75,9 @@ func (suite *CommonUserSuite) TestSetGet() {
 }
 
 type MongoUserSuite struct {
-	DB *mongo.Database
 	CommonUserSuite
+
+	DB *mongo.Database
 }
 
 func (suite *MongoUserSuite) SetupSuite() {

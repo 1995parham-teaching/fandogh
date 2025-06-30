@@ -21,11 +21,12 @@ type Register struct {
 
 // Validate register request payload.
 func (r Register) Validate() error {
-	if err := validation.ValidateStruct(&r,
+	err := validation.ValidateStruct(&r,
 		validation.Field(&r.Name, validation.Required),
 		validation.Field(&r.Email, validation.Required, is.Email),
 		validation.Field(&r.Password, validation.Required, validation.Length(PasswordMinLength, PasswordMaxLength)),
-	); err != nil {
+	)
+	if err != nil {
 		return fmt.Errorf("register request validation failed: %w", err)
 	}
 
@@ -40,10 +41,11 @@ type Login struct {
 
 // Validate login request payload.
 func (r Login) Validate() error {
-	if err := validation.ValidateStruct(&r,
+	err := validation.ValidateStruct(&r,
 		validation.Field(&r.Email, validation.Required, is.Email),
 		validation.Field(&r.Password, validation.Required, validation.Length(PasswordMinLength, PasswordMaxLength)),
-	); err != nil {
+	)
+	if err != nil {
 		return fmt.Errorf("login request validation failed: %w", err)
 	}
 

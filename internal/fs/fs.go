@@ -31,7 +31,8 @@ func Bucket(ctx context.Context, client *minio.Client, bucket string) error {
 
 	if !found {
 		// nolint: exhaustruct
-		if err := client.MakeBucket(ctx, bucket, minio.MakeBucketOptions{}); err != nil {
+		err := client.MakeBucket(ctx, bucket, minio.MakeBucketOptions{})
+		if err != nil {
 			return fmt.Errorf("cannot make minio bucket [%s]: %w", bucket, err)
 		}
 	}

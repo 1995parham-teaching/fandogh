@@ -29,13 +29,15 @@ func (h User) Create(c echo.Context) error {
 
 	var rq request.Register
 
-	if err := c.Bind(&rq); err != nil {
+	err := c.Bind(&rq)
+	if err != nil {
 		span.RecordError(err)
 
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	if err := rq.Validate(); err != nil {
+	err = rq.Validate()
+	if err != nil {
 		span.RecordError(err)
 
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -47,7 +49,8 @@ func (h User) Create(c echo.Context) error {
 		Name:     rq.Name,
 	}
 
-	if err := h.Store.Set(ctx, u); err != nil {
+	err = h.Store.Set(ctx, u)
+	if err != nil {
 		span.RecordError(err)
 
 		if errors.Is(err, user.ErrEmailDuplicate) {
@@ -68,13 +71,15 @@ func (h User) Login(c echo.Context) error {
 
 	var rq request.Login
 
-	if err := c.Bind(&rq); err != nil {
+	err := c.Bind(&rq)
+	if err != nil {
 		span.RecordError(err)
 
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	if err := rq.Validate(); err != nil {
+	err = rq.Validate()
+	if err != nil {
 		span.RecordError(err)
 
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())

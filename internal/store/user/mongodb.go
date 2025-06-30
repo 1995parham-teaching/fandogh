@@ -42,7 +42,8 @@ func (s *MongoUser) Set(ctx context.Context, user model.User) error {
 
 	users := s.DB.Collection(Collection)
 
-	if _, err := users.InsertOne(ctx, user); err != nil {
+	_, err := users.InsertOne(ctx, user)
+	if err != nil {
 		span.RecordError(err)
 
 		if mongo.IsDuplicateKeyError(err) {
@@ -65,7 +66,9 @@ func (s *MongoUser) Get(ctx context.Context, email string) (model.User, error) {
 	})
 
 	var user model.User
-	if err := record.Decode(&user); err != nil {
+
+	err := record.Decode(&user)
+	if err != nil {
 		span.RecordError(err)
 
 		if errors.Is(err, mongo.ErrNoDocuments) {

@@ -68,7 +68,8 @@ func main(cfg config.Config, logger *zap.Logger, tracer trace.Tracer) {
 		Logger: logger.Named("handler").Named("home"),
 	}.Register(api)
 
-	if err := app.Start(":1378"); !errors.Is(err, http.ErrServerClosed) {
+	err = app.Start(":1378")
+	if !errors.Is(err, http.ErrServerClosed) {
 		logger.Fatal("echo initiation failed", zap.Error(err))
 	}
 

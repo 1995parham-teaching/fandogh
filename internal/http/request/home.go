@@ -27,7 +27,7 @@ type NewHome struct {
 
 // Validate home creation request payload.
 func (r NewHome) Validate() error {
-	if err := validation.ValidateStruct(&r,
+	err := validation.ValidateStruct(&r,
 		validation.Field(&r.Title, validation.Required),
 		validation.Field(&r.Location, validation.Required),
 		validation.Field(&r.Description, validation.Required),
@@ -39,7 +39,8 @@ func (r NewHome) Validate() error {
 		validation.Field(&r.Contract, validation.Required),
 		validation.Field(&r.SecurityDeposit, validation.Required),
 		validation.Field(&r.Price, validation.Required),
-	); err != nil {
+	)
+	if err != nil {
 		return fmt.Errorf("home creation request validation failed: %w", err)
 	}
 

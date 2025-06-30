@@ -33,7 +33,8 @@ func Execute() {
 	server.Register(root, cfg, logger, tracer)
 	migrate.Register(root, cfg, logger)
 
-	if err := root.Execute(); err != nil {
+	err := root.Execute()
+	if err != nil {
 		logger.Error("failed to execute root command", zap.Error(err))
 		os.Exit(ExitFailure)
 	}

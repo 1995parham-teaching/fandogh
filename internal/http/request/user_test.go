@@ -74,7 +74,6 @@ func TestRegisterValidation(t *testing.T) {
 		}
 
 		err := rq.Validate()
-
 		if c.isValid && err != nil {
 			t.Fatalf("valid request %+v has error %s", rq, err)
 		}
@@ -137,7 +136,6 @@ func TestLoginValidation(t *testing.T) {
 		}
 
 		err := rq.Validate()
-
 		if c.isValid && err != nil {
 			t.Fatalf("valid request %+v has error %s", rq, err)
 		}

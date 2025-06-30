@@ -39,7 +39,8 @@ func NewServer(cfg Config) Server {
 func (s Server) Start(logger *zap.Logger) {
 	go func() {
 		// nolint: gosec
-		if err := http.ListenAndServe(s.address, s.srv); !errors.Is(err, http.ErrServerClosed) {
+		err := http.ListenAndServe(s.address, s.srv)
+		if !errors.Is(err, http.ErrServerClosed) {
 			logger.Error("metric server initiation failed", zap.Error(err))
 		}
 	}()

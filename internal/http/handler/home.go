@@ -30,13 +30,15 @@ func (h Home) New(c echo.Context) error {
 
 	var rq request.NewHome
 
-	if err := c.Bind(&rq); err != nil {
+	err := c.Bind(&rq)
+	if err != nil {
 		span.RecordError(err)
 
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	if err := rq.Validate(); err != nil {
+	err = rq.Validate()
+	if err != nil {
 		span.RecordError(err)
 
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -59,7 +61,9 @@ func (h Home) New(c echo.Context) error {
 	}
 
 	var photoFields []string
-	if err := echo.FormFieldBinder(c).BindWithDelimiter("photos", &photoFields, ",").BindError(); err != nil {
+
+	err = echo.FormFieldBinder(c).BindWithDelimiter("photos", &photoFields, ",").BindError()
+	if err != nil {
 		span.RecordError(err)
 
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -129,7 +133,8 @@ func (h Home) New(c echo.Context) error {
 		Price:           rq.Price,
 	}
 
-	if err := h.Store.Set(ctx, &m, photos); err != nil {
+	err = h.Store.Set(ctx, &m, photos)
+	if err != nil {
 		span.RecordError(err)
 
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())

@@ -18,6 +18,7 @@ import (
 
 type CommonHomeSuite struct {
 	suite.Suite
+
 	Store home.Home
 }
 
@@ -130,8 +131,9 @@ func (suite *CommonHomeSuite) TestSetGet() {
 }
 
 type MongoHomeSuite struct {
-	DB *mongo.Database
 	CommonHomeSuite
+
+	DB *mongo.Database
 }
 
 func (suite *MongoHomeSuite) SetupSuite() {
