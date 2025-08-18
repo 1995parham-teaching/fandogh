@@ -14,7 +14,7 @@ require (
 	github.com/prometheus/client_golang v1.23.0
 	github.com/spf13/cobra v1.9.1
 	github.com/stretchr/testify v1.10.0
-	go.mongodb.org/mongo-driver/v2 v2.2.3
+	go.mongodb.org/mongo-driver/v2 v2.3.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.62.0
 	go.opentelemetry.io/contrib/instrumentation/go.mongodb.org/mongo-driver/v2/mongo/otelmongo v0.0.0-20250803155312-a4cbe9a3158a
 	go.opentelemetry.io/otel v1.37.0
