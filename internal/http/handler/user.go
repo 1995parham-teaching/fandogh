@@ -22,7 +22,6 @@ type User struct {
 	JWT    jwt.JWT
 }
 
-// nolint: wrapcheck
 func (h User) Create(c echo.Context) error {
 	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.user.create")
 	defer span.End()

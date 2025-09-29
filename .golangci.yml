@@ -11,3 +11,7 @@ linters:
     - depguard
     - revive
     - ireturn
+  settings:
+    wrapcheck:
+      ignore-package-globs:
+        - github.com/labstack/echo/v4
