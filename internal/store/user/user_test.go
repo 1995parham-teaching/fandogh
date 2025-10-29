@@ -94,13 +94,8 @@ func (suite *MongoUserSuite) SetupSuite() {
 	suite.app = fxtest.New(
 		suite.T(),
 		fx.Provide(config.Provide),
-		fx.Provide(func(cfg config.Config) db.Config {
-			return cfg.Database
-		}),
 		fx.Provide(zap.NewNop),
-		fx.Provide(func() trace.Tracer {
-			return noop.NewTracerProvider().Tracer("")
-		}),
+		fx.Provide(noop.NewTracerProvider().Tracer("")),
 		fx.Provide(db.Provide),
 		fx.Provide(
 			fx.Annotate(user.Provide, fx.As(new(user.User))),
