@@ -8,8 +8,8 @@ import (
 	"github.com/minio/minio-go/v7/pkg/credentials"
 )
 
-// New creates a connection to minio to use as a file storage.
-func New(cfg Config) (*minio.Client, error) {
+// Provide creates a connection to minio to use as a file storage.
+func Provide(cfg Config) (*minio.Client, error) {
 	// initialize minio client object.
 	// nolint: exhaustruct
 	client, err := minio.New(cfg.Endpoint, &minio.Options{
@@ -21,11 +21,6 @@ func New(cfg Config) (*minio.Client, error) {
 	}
 
 	return client, nil
-}
-
-// Provide creates a connection to minio to use as a file storage.
-func Provide(cfg Config) (*minio.Client, error) {
-	return New(cfg)
 }
 
 func Bucket(ctx context.Context, client *minio.Client, bucket string) error {

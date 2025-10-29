@@ -13,7 +13,6 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
-	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/trace/noop"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
@@ -142,8 +141,10 @@ type MongoHomeSuite struct {
 }
 
 func (suite *MongoHomeSuite) SetupSuite() {
-	var database *mongo.Database
-	var homeStore home.Home
+	var (
+		database  *mongo.Database
+		homeStore home.Home
+	)
 
 	suite.app = fxtest.New(
 		suite.T(),
@@ -154,12 +155,8 @@ func (suite *MongoHomeSuite) SetupSuite() {
 		fx.Provide(func(cfg config.Config) fs.Config {
 			return cfg.FileStorage
 		}),
-		fx.Provide(func() *zap.Logger {
-			return zap.NewNop()
-		}),
-		fx.Provide(func() trace.Tracer {
-			return noop.NewTracerProvider().Tracer("")
-		}),
+		fx.Provide(zap.NewNop),
+		fx.Provide(noop.NewTracerProvider().Tracer("")),
 		fx.Provide(db.Provide),
 		fx.Provide(fs.Provide),
 		fx.Provide(

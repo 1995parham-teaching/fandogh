@@ -30,14 +30,14 @@ type UserSuite struct {
 }
 
 func (suite *UserSuite) SetupSuite() {
-	var engine *echo.Echo
-	var userStore store.User
+	var (
+		engine    *echo.Echo
+		userStore store.User
+	)
 
 	app := fxtest.New(
 		suite.T(),
-		fx.Provide(func() *zap.Logger {
-			return zap.NewNop()
-		}),
+		fx.Provide(zap.NewNop),
 		fx.Provide(func() trace.Tracer {
 			return noop.NewTracerProvider().Tracer("")
 		}),
@@ -49,9 +49,7 @@ func (suite *UserSuite) SetupSuite() {
 		fx.Provide(jwt.Provide),
 		fx.Provide(
 			fx.Annotate(
-				func() *store.MemoryUser {
-					return store.NewMemoryUser()
-				},
+				store.NewMemoryUser(),
 				fx.As(new(store.User)),
 			),
 		),
@@ -68,6 +66,7 @@ func (suite *UserSuite) SetupSuite() {
 				Tracer: tracer,
 				JWT:    jwtHandler,
 			}.Register(e.Group(""))
+
 			return e
 		}),
 		fx.Populate(&engine, &userStore),

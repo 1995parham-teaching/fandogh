@@ -86,8 +86,10 @@ type MongoUserSuite struct {
 }
 
 func (suite *MongoUserSuite) SetupSuite() {
-	var database *mongo.Database
-	var userStore user.User
+	var (
+		database  *mongo.Database
+		userStore user.User
+	)
 
 	suite.app = fxtest.New(
 		suite.T(),
@@ -95,9 +97,7 @@ func (suite *MongoUserSuite) SetupSuite() {
 		fx.Provide(func(cfg config.Config) db.Config {
 			return cfg.Database
 		}),
-		fx.Provide(func() *zap.Logger {
-			return zap.NewNop()
-		}),
+		fx.Provide(zap.NewNop),
 		fx.Provide(func() trace.Tracer {
 			return noop.NewTracerProvider().Tracer("")
 		}),
@@ -136,9 +136,7 @@ func (suite *MemoryUserSuite) SetupSuite() {
 		suite.T(),
 		fx.Provide(
 			fx.Annotate(
-				func() *user.MemoryUser {
-					return user.NewMemoryUser()
-				},
+				user.NewMemoryUser,
 				fx.As(new(user.User)),
 			),
 		),

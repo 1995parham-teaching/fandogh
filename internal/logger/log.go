@@ -12,8 +12,8 @@ type Config struct {
 	Level string `koanf:"level"`
 }
 
-// New creates a zap logger for console and also setup an output for syslog.
-func New(cfg Config) *zap.Logger {
+// Provide creates a zap logger for console and also setup an output for syslog.
+func Provide(cfg Config) *zap.Logger {
 	var lvl zapcore.Level
 
 	err := lvl.Set(cfg.Level)
@@ -33,9 +33,4 @@ func New(cfg Config) *zap.Logger {
 	logger := zap.New(core, zap.AddCaller(), zap.AddStacktrace(zap.ErrorLevel))
 
 	return logger
-}
-
-// Provide creates a zap logger for console and also setup an output for syslog.
-func Provide(cfg Config) *zap.Logger {
-	return New(cfg)
 }

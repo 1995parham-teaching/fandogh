@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/fx"
@@ -25,16 +26,21 @@ type Server struct {
 // NewServer creates a new monitoring server.
 func NewServer(cfg Config) Server {
 	if !cfg.Enabled {
-		return Server{enabled: false}
+		return Server{
+			srv:     nil,
+			enabled: false,
+		}
 	}
 
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.Handler())
 
 	return Server{
+		// nolint exhaustruct
 		srv: &http.Server{
-			Addr:    cfg.Address,
-			Handler: mux,
+			Addr:              cfg.Address,
+			Handler:           mux,
+			ReadHeaderTimeout: time.Second,
 		},
 		enabled: true,
 	}
@@ -53,6 +59,7 @@ func Provide(lc fx.Lifecycle, cfg Config, logger *zap.Logger) Server {
 			OnStart: func(_ context.Context) error {
 				go func() {
 					logger.Info("starting metrics server", zap.String("address", server.srv.Addr))
+
 					if err := server.srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
 						logger.Error("metric server initiation failed", zap.Error(err))
 					}
@@ -62,6 +69,7 @@ func Provide(lc fx.Lifecycle, cfg Config, logger *zap.Logger) Server {
 			},
 			OnStop: func(ctx context.Context) error {
 				logger.Info("shutting down metrics server")
+
 				return server.srv.Shutdown(ctx)
 			},
 		},

@@ -15,9 +15,8 @@ import (
 
 const connectionTimeout = 10 * time.Second
 
-// New creates a new mongodb connection and tests it.
-func New(cfg Config) (*mongo.Database, error) {
-	// connect to the mongodb
+// Provide creates a new mongodb connection with lifecycle management.
+func Provide(lc fx.Lifecycle, cfg Config, logger *zap.Logger) (*mongo.Database, error) {
 	opts := options.Client()
 	opts.ApplyURI(cfg.URL)
 	opts.SetMonitor(otelmongo.NewMonitor())
@@ -30,32 +29,22 @@ func New(cfg Config) (*mongo.Database, error) {
 		return nil, fmt.Errorf("db connection error: %w", err)
 	}
 
-	// ping the mongodb
-	{
-		ctx, done := context.WithTimeout(context.Background(), connectionTimeout)
-		defer done()
-
-		err := client.Ping(ctx, readpref.Primary())
-		if err != nil {
-			return nil, fmt.Errorf("db ping error: %w", err)
-		}
-	}
-
-	return client.Database(cfg.Name), nil
-}
-
-// Provide creates a new mongodb connection with lifecycle management.
-func Provide(lc fx.Lifecycle, cfg Config, logger *zap.Logger) (*mongo.Database, error) {
-	db, err := New(cfg)
-	if err != nil {
-		return nil, err
-	}
+	db := client.Database(cfg.Name)
 
 	lc.Append(
 		fx.Hook{
 			OnStop: func(ctx context.Context) error {
 				logger.Info("disconnecting from mongodb")
+
 				return db.Client().Disconnect(ctx)
+			},
+			OnStart: func(ctx context.Context) error {
+				err := client.Ping(ctx, readpref.Primary())
+				if err != nil {
+					return fmt.Errorf("db ping error: %w", err)
+				}
+
+				return nil
 			},
 		},
 	)

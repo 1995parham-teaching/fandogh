@@ -7,11 +7,14 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/logger"
 	"github.com/1995parham-teaching/fandogh/internal/metric"
 	telemetry "github.com/1995parham-teaching/fandogh/internal/telemetry/config"
+
+	"go.uber.org/fx"
 )
 
 // Default return default configuration.
 func Default() Config {
 	return Config{
+		Out: fx.Out{},
 		Database: db.Config{
 			Name: "fandogh",
 			URL:  "mongodb://127.0.0.1:27017",

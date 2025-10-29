@@ -5,10 +5,7 @@ import (
 
 	"github.com/1995parham-teaching/fandogh/internal/cmd/migrate"
 	"github.com/1995parham-teaching/fandogh/internal/cmd/server"
-	"github.com/1995parham-teaching/fandogh/internal/config"
-	"github.com/1995parham-teaching/fandogh/internal/logger"
 	"github.com/spf13/cobra"
-	"go.uber.org/zap"
 )
 
 // ExitFailure status code.
@@ -24,17 +21,9 @@ func Execute() {
 	}
 
 	server.Register(root)
+	migrate.Register(root)
 
-	// For migrate command, we still need config and logger
-	cfg := config.Provide()
-	logger := logger.Provide(cfg.Logger)
-	migrate.Register(root, cfg, logger)
-
-	err := root.Execute()
-	if err != nil {
-		if logger != nil {
-			logger.Error("failed to execute root command", zap.Error(err))
-		}
+	if err := root.Execute(); err != nil {
 		os.Exit(ExitFailure)
 	}
 }
