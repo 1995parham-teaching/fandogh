@@ -11,7 +11,11 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/trace/noop"
+	"go.uber.org/fx"
+	"go.uber.org/fx/fxtest"
+	"go.uber.org/zap"
 )
 
 type CommonUserSuite struct {
@@ -77,24 +81,43 @@ func (suite *CommonUserSuite) TestSetGet() {
 type MongoUserSuite struct {
 	CommonUserSuite
 
-	DB *mongo.Database
+	DB  *mongo.Database
+	app *fxtest.App
 }
 
 func (suite *MongoUserSuite) SetupSuite() {
-	cfg := config.New()
+	var database *mongo.Database
+	var userStore user.User
 
-	db, err := db.New(cfg.Database)
-	suite.Require().NoError(err)
+	suite.app = fxtest.New(
+		suite.T(),
+		fx.Provide(config.Provide),
+		fx.Provide(func(cfg config.Config) db.Config {
+			return cfg.Database
+		}),
+		fx.Provide(func() *zap.Logger {
+			return zap.NewNop()
+		}),
+		fx.Provide(func() trace.Tracer {
+			return noop.NewTracerProvider().Tracer("")
+		}),
+		fx.Provide(db.Provide),
+		fx.Provide(
+			fx.Annotate(user.Provide, fx.As(new(user.User))),
+		),
+		fx.Populate(&database, &userStore),
+	)
+	suite.app.RequireStart()
 
-	suite.DB = db
-	suite.Store = user.NewMongoUser(db, noop.NewTracerProvider().Tracer(""))
+	suite.DB = database
+	suite.Store = userStore
 }
 
 func (suite *MongoUserSuite) TearDownSuite() {
 	_, err := suite.DB.Collection(user.Collection).DeleteMany(context.Background(), bson.D{})
 	suite.Require().NoError(err)
 
-	suite.Require().NoError(suite.DB.Client().Disconnect(context.Background()))
+	suite.app.RequireStop()
 }
 
 func TestMongoUserSuite(t *testing.T) {
@@ -107,7 +130,23 @@ type MemoryUserSuite struct {
 }
 
 func (suite *MemoryUserSuite) SetupSuite() {
-	suite.Store = user.NewMemoryUser()
+	var userStore user.User
+
+	app := fxtest.New(
+		suite.T(),
+		fx.Provide(
+			fx.Annotate(
+				func() *user.MemoryUser {
+					return user.NewMemoryUser()
+				},
+				fx.As(new(user.User)),
+			),
+		),
+		fx.Populate(&userStore),
+	)
+	defer app.RequireStart().RequireStop()
+
+	suite.Store = userStore
 }
 
 func TestMemoryUserSuite(t *testing.T) {

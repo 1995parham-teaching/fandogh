@@ -15,6 +15,7 @@ import (
 	"github.com/knadh/koanf/providers/env"
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/providers/structs"
+	"go.uber.org/fx"
 )
 
 const (
@@ -22,20 +23,19 @@ const (
 	Prefix = "fandogh_"
 )
 
-type (
-	// Config holds all configurations.
-	Config struct {
-		Database    db.Config        `koanf:"database"`
-		FileStorage fs.Config        `koanf:"file_storage"`
-		Monitoring  metric.Config    `koanf:"monitoring"`
-		Logger      logger.Config    `koanf:"logger"`
-		Telemetry   telemetry.Config `koanf:"telemetry"`
-		JWT         jwt.Config       `koanf:"jwt"`
-	}
-)
+type Config struct {
+	fx.Out
 
-// New reads configuration with viper.
-func New() Config {
+	Database    db.Config        `koanf:"database"`
+	FileStorage fs.Config        `koanf:"file_storage"`
+	Monitoring  metric.Config    `koanf:"monitoring"`
+	Logger      logger.Config    `koanf:"logger"`
+	Telemetry   telemetry.Config `koanf:"telemetry"`
+	JWT         jwt.Config       `koanf:"jwt"`
+}
+
+// Provide reads configuration with koanf.
+func Provide() Config {
 	var instance Config
 
 	k := koanf.New(".")

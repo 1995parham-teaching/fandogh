@@ -1,10 +1,12 @@
 package metric
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
 
@@ -16,32 +18,54 @@ type Config struct {
 
 // Server contains information about metrics server.
 type Server struct {
-	srv     *http.ServeMux
-	address string
+	srv     *http.Server
+	enabled bool
 }
 
 // NewServer creates a new monitoring server.
 func NewServer(cfg Config) Server {
-	var srv *http.ServeMux
-
-	if cfg.Enabled {
-		srv = http.NewServeMux()
-		srv.Handle("/metrics", promhttp.Handler())
+	if !cfg.Enabled {
+		return Server{enabled: false}
 	}
 
+	mux := http.NewServeMux()
+	mux.Handle("/metrics", promhttp.Handler())
+
 	return Server{
-		address: cfg.Address,
-		srv:     srv,
+		srv: &http.Server{
+			Addr:    cfg.Address,
+			Handler: mux,
+		},
+		enabled: true,
 	}
 }
 
-// Start creates and run a metric server for prometheus in new go routine.
-func (s Server) Start(logger *zap.Logger) {
-	go func() {
-		// nolint: gosec
-		err := http.ListenAndServe(s.address, s.srv)
-		if !errors.Is(err, http.ErrServerClosed) {
-			logger.Error("metric server initiation failed", zap.Error(err))
-		}
-	}()
+// Provide creates a new monitoring server with lifecycle management.
+func Provide(lc fx.Lifecycle, cfg Config, logger *zap.Logger) Server {
+	server := NewServer(cfg)
+
+	if !server.enabled {
+		return server
+	}
+
+	lc.Append(
+		fx.Hook{
+			OnStart: func(_ context.Context) error {
+				go func() {
+					logger.Info("starting metrics server", zap.String("address", server.srv.Addr))
+					if err := server.srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
+						logger.Error("metric server initiation failed", zap.Error(err))
+					}
+				}()
+
+				return nil
+			},
+			OnStop: func(ctx context.Context) error {
+				logger.Info("shutting down metrics server")
+				return server.srv.Shutdown(ctx)
+			},
+		},
+	)
+
+	return server
 }

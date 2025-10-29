@@ -13,7 +13,11 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/trace/noop"
+	"go.uber.org/fx"
+	"go.uber.org/fx/fxtest"
+	"go.uber.org/zap"
 )
 
 type CommonHomeSuite struct {
@@ -133,27 +137,47 @@ func (suite *CommonHomeSuite) TestSetGet() {
 type MongoHomeSuite struct {
 	CommonHomeSuite
 
-	DB *mongo.Database
+	DB  *mongo.Database
+	app *fxtest.App
 }
 
 func (suite *MongoHomeSuite) SetupSuite() {
-	cfg := config.New()
+	var database *mongo.Database
+	var homeStore home.Home
 
-	db, err := db.New(cfg.Database)
-	suite.Require().NoError(err)
+	suite.app = fxtest.New(
+		suite.T(),
+		fx.Provide(config.Provide),
+		fx.Provide(func(cfg config.Config) db.Config {
+			return cfg.Database
+		}),
+		fx.Provide(func(cfg config.Config) fs.Config {
+			return cfg.FileStorage
+		}),
+		fx.Provide(func() *zap.Logger {
+			return zap.NewNop()
+		}),
+		fx.Provide(func() trace.Tracer {
+			return noop.NewTracerProvider().Tracer("")
+		}),
+		fx.Provide(db.Provide),
+		fx.Provide(fs.Provide),
+		fx.Provide(
+			fx.Annotate(home.Provide, fx.As(new(home.Home))),
+		),
+		fx.Populate(&database, &homeStore),
+	)
+	suite.app.RequireStart()
 
-	minio, err := fs.New(cfg.FileStorage)
-	suite.Require().NoError(err)
-
-	suite.DB = db
-	suite.Store = home.NewMongoHome(db, minio, noop.NewTracerProvider().Tracer(""))
+	suite.DB = database
+	suite.Store = homeStore
 }
 
 func (suite *MongoHomeSuite) TearDownSuite() {
 	_, err := suite.DB.Collection(user.Collection).DeleteMany(context.Background(), bson.D{})
 	suite.Require().NoError(err)
 
-	suite.Require().NoError(suite.DB.Client().Disconnect(context.Background()))
+	suite.app.RequireStop()
 }
 
 func TestMongoHomeSuite(t *testing.T) {

@@ -20,6 +20,11 @@ type JWT struct {
 	Config
 }
 
+// Provide creates new JWT handler for dependency injection.
+func Provide(cfg Config) JWT {
+	return JWT{Config: cfg}
+}
+
 func (j JWT) Middleware() echo.MiddlewareFunc {
 	// nolint: exhaustruct
 	return echojwt.WithConfig(echojwt.Config{

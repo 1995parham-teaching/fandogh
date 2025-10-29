@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/1995parham-teaching/fandogh/internal/telemetry/config"
+	telemetryConfig "github.com/1995parham-teaching/fandogh/internal/telemetry/config"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	stdout "go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
@@ -14,7 +14,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-func New(cfg config.Trace) trace.Tracer {
+func New(cfg telemetryConfig.Trace) trace.Tracer {
 	var exporter sdktrace.SpanExporter
 
 	var err error
@@ -52,4 +52,8 @@ func New(cfg config.Trace) trace.Tracer {
 	tracer := otel.Tracer("1995parham.me/fandogh")
 
 	return tracer
+}
+
+func Provide(cfg telemetryConfig.Trace) trace.Tracer {
+	return New(cfg)
 }

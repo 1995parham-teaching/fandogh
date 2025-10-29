@@ -35,6 +35,11 @@ func NewMongoUser(db *mongo.Database, tracer trace.Tracer) *MongoUser {
 	}
 }
 
+// Provide creates new User store for dependency injection.
+func Provide(db *mongo.Database, tracer trace.Tracer) *MongoUser {
+	return NewMongoUser(db, tracer)
+}
+
 // Set saves given user in database.
 func (s *MongoUser) Set(ctx context.Context, user model.User) error {
 	ctx, span := s.Tracer.Start(ctx, "store.user.set")

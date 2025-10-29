@@ -15,7 +15,10 @@ import (
 	store "github.com/1995parham-teaching/fandogh/internal/store/user"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/suite"
+	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/trace/noop"
+	"go.uber.org/fx"
+	"go.uber.org/fx/fxtest"
 	"go.uber.org/zap"
 )
 
@@ -27,21 +30,52 @@ type UserSuite struct {
 }
 
 func (suite *UserSuite) SetupSuite() {
-	suite.engine = echo.New()
-	suite.store = store.NewMemoryUser()
+	var engine *echo.Echo
+	var userStore store.User
 
-	user := handler.User{
-		Store:  suite.store,
-		Logger: zap.NewNop(),
-		Tracer: noop.NewTracerProvider().Tracer(""),
-		JWT: jwt.JWT{
-			Config: jwt.Config{
+	app := fxtest.New(
+		suite.T(),
+		fx.Provide(func() *zap.Logger {
+			return zap.NewNop()
+		}),
+		fx.Provide(func() trace.Tracer {
+			return noop.NewTracerProvider().Tracer("")
+		}),
+		fx.Provide(func() jwt.Config {
+			return jwt.Config{
 				AccessTokenSecret: "secret",
-			},
-		},
-	}
+			}
+		}),
+		fx.Provide(jwt.Provide),
+		fx.Provide(
+			fx.Annotate(
+				func() *store.MemoryUser {
+					return store.NewMemoryUser()
+				},
+				fx.As(new(store.User)),
+			),
+		),
+		fx.Provide(func(
+			userStore store.User,
+			logger *zap.Logger,
+			tracer trace.Tracer,
+			jwtHandler jwt.JWT,
+		) *echo.Echo {
+			e := echo.New()
+			handler.User{
+				Store:  userStore,
+				Logger: logger,
+				Tracer: tracer,
+				JWT:    jwtHandler,
+			}.Register(e.Group(""))
+			return e
+		}),
+		fx.Populate(&engine, &userStore),
+	)
+	defer app.RequireStart().RequireStop()
 
-	user.Register(suite.engine.Group(""))
+	suite.engine = engine
+	suite.store = userStore
 }
 
 func (suite *UserSuite) TestBadRequest() {

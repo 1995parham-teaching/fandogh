@@ -70,6 +70,11 @@ func New() (OPA, error) {
 	}, nil
 }
 
+// Provide creates new OPA handler for dependency injection.
+func Provide() (OPA, error) {
+	return New()
+}
+
 func (opa OPA) Middleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {

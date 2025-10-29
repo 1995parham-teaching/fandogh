@@ -43,6 +43,11 @@ func NewMongoHome(db *mongo.Database, client *minio.Client, tracer trace.Tracer)
 	}
 }
 
+// Provide creates new Home store for dependency injection.
+func Provide(db *mongo.Database, client *minio.Client, tracer trace.Tracer) *MongoHome {
+	return NewMongoHome(db, client, tracer)
+}
+
 // Set saves given home in database and returns its id.
 func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Photo) error {
 	ctx, span := s.Tracer.Start(ctx, "store.home.set")

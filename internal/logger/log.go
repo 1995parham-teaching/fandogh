@@ -34,3 +34,8 @@ func New(cfg Config) *zap.Logger {
 
 	return logger
 }
+
+// Provide creates a zap logger for console and also setup an output for syslog.
+func Provide(cfg Config) *zap.Logger {
+	return New(cfg)
+}
