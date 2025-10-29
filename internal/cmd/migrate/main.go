@@ -17,7 +17,7 @@ import (
 
 const enable = 1
 
-func main(cfg config.Config, shutdonwer fx.Shutdowner, logger *zap.Logger, db *mongo.Database) {
+func main(shutdonwer fx.Shutdowner, logger *zap.Logger, db *mongo.Database) {
 	idx, err := db.Collection(user.Collection).Indexes().CreateOne(
 		context.Background(),
 		mongo.IndexModel{
@@ -25,10 +25,12 @@ func main(cfg config.Config, shutdonwer fx.Shutdowner, logger *zap.Logger, db *m
 			Options: options.Index().SetUnique(true),
 		})
 	if err != nil {
-		panic(err)
+		logger.Error("failed to create database index", zap.Error(err))
 	}
 
 	logger.Info("database index", zap.Any("index", idx))
+
+	_ = shutdonwer.Shutdown()
 }
 
 // Register migrate command.
