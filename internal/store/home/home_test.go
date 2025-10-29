@@ -151,12 +151,6 @@ func (suite *MongoHomeSuite) SetupSuite() {
 	suite.app = fxtest.New(
 		suite.T(),
 		fx.Provide(config.Provide),
-		fx.Provide(func(cfg config.Config) db.Config {
-			return cfg.Database
-		}),
-		fx.Provide(func(cfg config.Config) fs.Config {
-			return cfg.FileStorage
-		}),
 		fx.Provide(zap.NewNop),
 		fx.Provide(func() trace.Tracer {
 			return noop.NewTracerProvider().Tracer("")
