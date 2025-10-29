@@ -3,6 +3,16 @@ package home_test
 import (
 	"context"
 	"testing"
+	"weak"
+
+	"github.com/stretchr/testify/suite"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.opentelemetry.io/otel/trace"
+	"go.opentelemetry.io/otel/trace/noop"
+	"go.uber.org/fx"
+	"go.uber.org/fx/fxtest"
+	"go.uber.org/zap"
 
 	"github.com/1995parham-teaching/fandogh/internal/config"
 	"github.com/1995parham-teaching/fandogh/internal/db"
@@ -10,13 +20,6 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/model"
 	"github.com/1995parham-teaching/fandogh/internal/store/home"
 	"github.com/1995parham-teaching/fandogh/internal/store/user"
-	"github.com/stretchr/testify/suite"
-	"go.mongodb.org/mongo-driver/v2/bson"
-	"go.mongodb.org/mongo-driver/v2/mongo"
-	"go.opentelemetry.io/otel/trace/noop"
-	"go.uber.org/fx"
-	"go.uber.org/fx/fxtest"
-	"go.uber.org/zap"
 )
 
 type CommonHomeSuite struct {
@@ -156,7 +159,9 @@ func (suite *MongoHomeSuite) SetupSuite() {
 			return cfg.FileStorage
 		}),
 		fx.Provide(zap.NewNop),
-		fx.Provide(noop.NewTracerProvider().Tracer("")),
+		fx.Provide(func() trace.Tracer {
+			return noop.NewTracerProvider().Tracer("")
+		}),
 		fx.Provide(db.Provide),
 		fx.Provide(fs.Provide),
 		fx.Provide(

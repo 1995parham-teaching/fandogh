@@ -49,7 +49,7 @@ func (suite *UserSuite) SetupSuite() {
 		fx.Provide(jwt.Provide),
 		fx.Provide(
 			fx.Annotate(
-				store.NewMemoryUser(),
+				store.NewMemoryUser,
 				fx.As(new(store.User)),
 			),
 		),

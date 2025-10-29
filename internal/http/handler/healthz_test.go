@@ -26,8 +26,10 @@ func (suite *HealthzSuite) SetupSuite() {
 
 	app := fxtest.New(
 		suite.T(),
-		fx.Provide(zap.NewNop()),
-		fx.Provide(noop.NewTracerProvider().Tracer("")),
+		fx.Provide(zap.NewNop),
+		fx.Provide(func() trace.Tracer {
+			return noop.NewTracerProvider().Tracer("")
+		}),
 		fx.Provide(func(logger *zap.Logger, tracer trace.Tracer) *echo.Echo {
 			e := echo.New()
 			handler.Healthz{
