@@ -5,10 +5,22 @@ services:
     ports:
       - 8181:8181
     command: run --server --log-level debug --addr=0.0.0.0:8181
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8181/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   database:
     image: mongo:latest
     ports:
       - 27017:27017
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
   minio:
     image: minio/minio
     environment:
@@ -17,6 +29,12 @@ services:
     ports:
       - 9000:9000
     command: server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   jaeger:
     image: jaegertracing/jaeger:latest
     ports:
@@ -29,3 +47,9 @@ services:
       - target: 14268
         published: 14268
         protocol: tcp
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:16686/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
