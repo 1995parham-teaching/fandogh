@@ -10,13 +10,13 @@ require (
 	github.com/labstack/echo-jwt/v4 v4.4.0
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/minio/minio-go/v7 v7.0.97
-	github.com/open-policy-agent/opa v1.10.1
+	github.com/open-policy-agent/opa v1.11.0
 	github.com/prometheus/client_golang v1.23.2
 	github.com/spf13/cobra v1.10.1
 	github.com/stretchr/testify v1.11.1
 	go.mongodb.org/mongo-driver/v2 v2.4.0
 	go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho v0.63.0
-	go.opentelemetry.io/contrib/instrumentation/go.mongodb.org/mongo-driver/v2/mongo/otelmongo v0.0.0-20251122153818-b0a501bca3d8
+	go.opentelemetry.io/contrib/instrumentation/go.mongodb.org/mongo-driver/v2/mongo/otelmongo v0.0.0-20251129101420-139f44645027
 	go.opentelemetry.io/otel v1.38.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.38.0
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.38.0
@@ -31,6 +31,7 @@ require (
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytecodealliance/wasmtime-go/v37 v37.0.0 // indirect
+	github.com/bytecodealliance/wasmtime-go/v39 v39.0.1 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/containerd/containerd/v2 v2.2.0 // indirect
@@ -98,7 +99,7 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/vektah/gqlparser/v2 v2.5.31 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
-	github.com/xdg-go/scram v1.1.2 // indirect
+	github.com/xdg-go/scram v1.2.0 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
@@ -118,8 +119,8 @@ require (
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.31.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20251111163417-95abcf5c77ba // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20251111163417-95abcf5c77ba // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20251124214823-79d6a2a48846 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20251124214823-79d6a2a48846 // indirect
 	google.golang.org/grpc v1.77.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
