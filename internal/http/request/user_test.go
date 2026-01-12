@@ -43,25 +43,25 @@ func TestRegisterValidation(t *testing.T) {
 		{
 			name:     "Parham Alvani",
 			password: "1234567",
-			email:    "parham.alvani@aut.ac.ir",
+			email:    "parham.alvani@yahoo.com",
 			isValid:  true,
 		},
 		{
 			name:     "Parham Alvani",
 			password: "12345",
-			email:    "parham.alvani@aut.ac.ir",
+			email:    "parham.alvani@yahoo.com",
 			isValid:  false,
 		},
 		{
 			name:     "Parham Alvani",
 			password: "123456",
-			email:    "parham.alvani@aut.ac.ir",
+			email:    "parham.alvani@yahoo.com",
 			isValid:  true,
 		},
 		{
 			name:     "پرهام الوانی",
 			password: "123456",
-			email:    "parham.alvani@aut.ac.ir",
+			email:    "parham.alvani@yahoo.com",
 			isValid:  true,
 		},
 	}
@@ -114,17 +114,17 @@ func TestLoginValidation(t *testing.T) {
 		},
 		{
 			password: "1234567",
-			email:    "parham.alvani@aut.ac.ir",
+			email:    "parham.alvani@yahoo.com",
 			isValid:  true,
 		},
 		{
 			password: "12345",
-			email:    "parham.alvani@aut.ac.ir",
+			email:    "parham.alvani@yahoo.com",
 			isValid:  false,
 		},
 		{
 			password: "123456",
-			email:    "parham.alvani@aut.ac.ir",
+			email:    "parham.alvani@yahoo.com",
 			isValid:  true,
 		},
 	}
