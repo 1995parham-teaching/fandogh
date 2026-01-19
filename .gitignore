@@ -1,0 +1,49 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+fandogh
+
+# Test binary
+*.test
+
+# Output of go coverage
+*.out
+coverage.html
+
+# Go workspace
+go.work
+go.work.sum
+
+# Dependency directories
+vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local configuration (keep example)
+configs/config.yml
+configs/config.local.yml
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Debug files
+debug
+*.log
+
+# Build output
+bin/
+dist/

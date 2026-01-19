@@ -10,6 +10,7 @@ monitoring:
 telemetry:
   trace:
     enabled: true
+    agent: "127.0.0.1:4317"
 file_storage:
   endpoint: "127.0.0.1:8333"
   access_key: ""

@@ -35,7 +35,7 @@ func Default() Config {
 		Telemetry: telemetry.Config{
 			Trace: telemetry.Trace{
 				Enabled: false,
-				Agent:   "",
+				Agent:   "127.0.0.1:4317",
 			},
 		},
 		JWT: jwt.Config{

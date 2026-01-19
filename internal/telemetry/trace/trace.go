@@ -54,6 +54,6 @@ func New(cfg telemetryConfig.Trace) trace.Tracer {
 	return tracer
 }
 
-func Provide(cfg telemetryConfig.Trace) trace.Tracer {
-	return New(cfg)
+func Provide(cfg telemetryConfig.Config) trace.Tracer {
+	return New(cfg.Trace)
 }
