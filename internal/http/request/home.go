@@ -33,6 +33,7 @@ type NewHome struct {
 }
 
 // Validate home creation request payload.
+// nolint: dupl
 func (r NewHome) Validate() error {
 	err := validation.ValidateStruct(&r,
 		validation.Field(&r.Title, validation.Required),
@@ -74,6 +75,7 @@ type UpdateHome struct {
 }
 
 // Validate home update request payload.
+// nolint: dupl
 func (r UpdateHome) Validate() error {
 	err := validation.ValidateStruct(&r,
 		validation.Field(&r.Title, validation.Required),

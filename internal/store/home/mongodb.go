@@ -149,7 +149,7 @@ func (s *MongoHome) List(ctx context.Context, skip, limit int64) (ListResult, er
 		return ListResult{}, fmt.Errorf("mongodb find failed: %w", err)
 	}
 
-	defer cursor.Close(ctx)
+	defer func() { _ = cursor.Close(ctx) }()
 
 	var homes []model.Home
 

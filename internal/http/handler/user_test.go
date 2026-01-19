@@ -161,6 +161,7 @@ func (suite *UserSuite) TestLogin() {
 		Name:     "Elahe Dastan",
 		Email:    "elahe.dstn@gmail.com",
 		Password: "123456",
+		Admin:    false,
 	}))
 
 	cases := []struct {

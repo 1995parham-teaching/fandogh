@@ -15,6 +15,7 @@ import (
 // Claims extends jwt.RegisteredClaims with custom fields.
 type Claims struct {
 	jwt.RegisteredClaims
+
 	Admin bool `json:"admin"`
 }
 

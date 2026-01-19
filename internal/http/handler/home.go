@@ -17,6 +17,12 @@ import (
 	"go.uber.org/zap"
 )
 
+// Pagination defaults.
+const (
+	defaultLimit = 10
+	maxLimit     = 100
+)
+
 type Home struct {
 	Store  home.Home
 	Tracer trace.Tracer
@@ -151,7 +157,7 @@ func (h Home) List(c echo.Context) error {
 	defer span.End()
 
 	skip := int64(0)
-	limit := int64(10)
+	limit := int64(defaultLimit)
 
 	if s := c.QueryParam("skip"); s != "" {
 		if v, err := strconv.ParseInt(s, 10, 64); err == nil && v >= 0 {
@@ -160,7 +166,7 @@ func (h Home) List(c echo.Context) error {
 	}
 
 	if l := c.QueryParam("limit"); l != "" {
-		if v, err := strconv.ParseInt(l, 10, 64); err == nil && v > 0 && v <= 100 {
+		if v, err := strconv.ParseInt(l, 10, 64); err == nil && v > 0 && v <= maxLimit {
 			limit = v
 		}
 	}
@@ -176,7 +182,7 @@ func (h Home) List(c echo.Context) error {
 }
 
 // Update modifies an existing home. Only the owner or an admin can update.
-// nolint: wrapcheck, cyclop
+// nolint: wrapcheck, cyclop, funlen
 func (h Home) Update(c echo.Context) error {
 	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.home.update")
 	defer span.End()
