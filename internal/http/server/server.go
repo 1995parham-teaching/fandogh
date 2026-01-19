@@ -7,7 +7,6 @@ import (
 
 	"github.com/1995parham-teaching/fandogh/internal/http/handler"
 	"github.com/1995parham-teaching/fandogh/internal/http/jwt"
-	"github.com/1995parham-teaching/fandogh/internal/http/opa"
 	"github.com/1995parham-teaching/fandogh/internal/store/home"
 	"github.com/1995parham-teaching/fandogh/internal/store/user"
 	"github.com/labstack/echo/v4"
@@ -24,7 +23,6 @@ func Provide(
 	logger *zap.Logger,
 	tracer trace.Tracer,
 	jwtHandler jwt.JWT,
-	opaHandler opa.OPA,
 ) *echo.Echo {
 	app := echo.New()
 	app.Debug = true
@@ -43,7 +41,7 @@ func Provide(
 		JWT:    jwtHandler,
 	}.Register(app.Group(""))
 
-	api := app.Group("/api", jwtHandler.Middleware(), opaHandler.Middleware())
+	api := app.Group("/api", jwtHandler.Middleware())
 
 	handler.Home{
 		Store:  homeStore,

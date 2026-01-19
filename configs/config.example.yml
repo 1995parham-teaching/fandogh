@@ -10,3 +10,8 @@ monitoring:
 telemetry:
   trace:
     enabled: true
+file_storage:
+  endpoint: "127.0.0.1:8333"
+  access_key: ""
+  secret_key: ""
+  use_ssl: false

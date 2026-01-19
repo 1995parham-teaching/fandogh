@@ -63,7 +63,7 @@ func (s *MongoUser) Set(ctx context.Context, user model.User) error {
 
 // Get retrieves user of the given email if it exists.
 func (s *MongoUser) Get(ctx context.Context, email string) (model.User, error) {
-	ctx, span := s.Tracer.Start(ctx, "store.url.get")
+	ctx, span := s.Tracer.Start(ctx, "store.user.get")
 	defer span.End()
 
 	record := s.DB.Collection(Collection).FindOne(ctx, bson.M{

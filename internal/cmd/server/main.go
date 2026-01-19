@@ -5,7 +5,6 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/db"
 	"github.com/1995parham-teaching/fandogh/internal/fs"
 	"github.com/1995parham-teaching/fandogh/internal/http/jwt"
-	"github.com/1995parham-teaching/fandogh/internal/http/opa"
 	"github.com/1995parham-teaching/fandogh/internal/http/server"
 	"github.com/1995parham-teaching/fandogh/internal/logger"
 	"github.com/1995parham-teaching/fandogh/internal/metric"
@@ -49,7 +48,6 @@ func Register(root *cobra.Command) {
 						fx.Annotate(home.Provide, fx.As(new(home.Home))),
 					),
 					fx.Provide(jwt.Provide),
-					fx.Provide(opa.Provide),
 					fx.WithLogger(func(logger *zap.Logger) fxevent.Logger {
 						return &fxevent.ZapLogger{Logger: logger}
 					}),

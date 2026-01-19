@@ -12,6 +12,12 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// Claims extends jwt.RegisteredClaims with custom fields.
+type Claims struct {
+	jwt.RegisteredClaims
+	Admin bool `json:"admin"`
+}
+
 type Config struct {
 	AccessTokenSecret string
 }
@@ -31,20 +37,26 @@ func (j JWT) Middleware() echo.MiddlewareFunc {
 		ContextKey:    common.UserContextKey,
 		SigningKey:    []byte(j.AccessTokenSecret),
 		SigningMethod: jwt.SigningMethodHS256.Name,
+		NewClaimsFunc: func(_ echo.Context) jwt.Claims {
+			return new(Claims)
+		},
 	})
 }
 
 // NewAccessToken creates new access token for given user.
 func (j JWT) NewAccessToken(u model.User) (string, error) {
 	// create token
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
-		Audience:  jwt.ClaimStrings{"user"},
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
-		ID:        uuid.New().String(),
-		IssuedAt:  jwt.NewNumericDate(time.Now()),
-		Issuer:    "fandogh",
-		NotBefore: jwt.NewNumericDate(time.Now()),
-		Subject:   u.Email,
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, Claims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Audience:  jwt.ClaimStrings{"user"},
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
+			ID:        uuid.New().String(),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			Issuer:    "fandogh",
+			NotBefore: jwt.NewNumericDate(time.Now()),
+			Subject:   u.Email,
+		},
+		Admin: u.Admin,
 	})
 
 	// generate encoded token and send it as response

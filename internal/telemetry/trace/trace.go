@@ -41,7 +41,7 @@ func New(cfg telemetryConfig.Trace) trace.Tracer {
 		),
 	)
 	if err != nil {
-		panic(err)
+		log.Fatalf("failed to merge resources: %v", err)
 	}
 
 	bsp := sdktrace.NewBatchSpanProcessor(exporter)

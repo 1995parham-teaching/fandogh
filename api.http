@@ -21,21 +21,65 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### new_house
+### new_home
 
-# Create a new house
+# Create a new home (with optional base64 photos)
 POST 127.0.0.1:1378/api/homes HTTP/1.1
 Authorization: Bearer {{login.response.body.accessToken}}
-Content-Type: application/x-www-form-urlencoded
+Content-Type: application/json
 
-title=sweet&
-location=italy&
-description=a place to live&
-peoples=3&
-room=good&
-bed=single&
-rooms=4&
-bathrooms=1&
-contract=good&
-price=100&
-security_deposit=1000
+{
+  "title": "sweet home",
+  "location": "italy",
+  "description": "a place to live",
+  "peoples": 3,
+  "room": "good",
+  "bed": "single",
+  "rooms": 4,
+  "bathrooms": 1,
+  "smoking": false,
+  "guest": true,
+  "pet": false,
+  "bills_included": false,
+  "contract": "good",
+  "security_deposit": 1000,
+  "price": 100,
+  "photos": []
+}
+
+### list_homes
+
+# List homes with pagination
+GET 127.0.0.1:1378/api/homes?skip=0&limit=10 HTTP/1.1
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### get_home
+
+# Get a specific home by ID
+GET 127.0.0.1:1378/api/homes/{{new_home.response.body.id}} HTTP/1.1
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### update_home
+
+# Update a home (only owner or admin can update)
+PUT 127.0.0.1:1378/api/homes/{{new_home.response.body.id}} HTTP/1.1
+Authorization: Bearer {{login.response.body.accessToken}}
+Content-Type: application/json
+
+{
+  "title": "updated sweet home",
+  "location": "italy",
+  "description": "an updated place to live",
+  "peoples": 4,
+  "room": "great",
+  "bed": "double",
+  "rooms": 5,
+  "bathrooms": 2,
+  "smoking": false,
+  "guest": true,
+  "pet": false,
+  "bills_included": true,
+  "contract": "long-term",
+  "security_deposit": 1500,
+  "price": 150
+}

@@ -11,6 +11,7 @@ import (
 	"github.com/minio/minio-go/v7"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -122,4 +123,89 @@ func (s *MongoHome) Get(ctx context.Context, id string) (model.Home, error) {
 	}
 
 	return home, nil
+}
+
+// List retrieves homes with pagination.
+func (s *MongoHome) List(ctx context.Context, skip, limit int64) (ListResult, error) {
+	ctx, span := s.Tracer.Start(ctx, "store.home.list")
+	defer span.End()
+
+	collection := s.DB.Collection(Collection)
+
+	total, err := collection.CountDocuments(ctx, bson.M{})
+	if err != nil {
+		span.RecordError(err)
+
+		return ListResult{}, fmt.Errorf("mongodb count failed: %w", err)
+	}
+
+	// nolint: exhaustruct
+	opts := options.Find().SetSkip(skip).SetLimit(limit)
+
+	cursor, err := collection.Find(ctx, bson.M{}, opts)
+	if err != nil {
+		span.RecordError(err)
+
+		return ListResult{}, fmt.Errorf("mongodb find failed: %w", err)
+	}
+
+	defer cursor.Close(ctx)
+
+	var homes []model.Home
+
+	if err := cursor.All(ctx, &homes); err != nil {
+		span.RecordError(err)
+
+		return ListResult{}, fmt.Errorf("mongodb cursor decode failed: %w", err)
+	}
+
+	if homes == nil {
+		homes = []model.Home{}
+	}
+
+	return ListResult{
+		Homes: homes,
+		Total: total,
+		Skip:  skip,
+		Limit: limit,
+	}, nil
+}
+
+// Update modifies an existing home by its ID.
+func (s *MongoHome) Update(ctx context.Context, id string, home model.Home) error {
+	ctx, span := s.Tracer.Start(ctx, "store.home.update")
+	defer span.End()
+
+	collection := s.DB.Collection(Collection)
+
+	result, err := collection.UpdateOne(ctx, bson.M{"_id": id}, bson.M{
+		"$set": bson.M{
+			"title":            home.Title,
+			"location":         home.Location,
+			"description":      home.Description,
+			"peoples":          home.Peoples,
+			"room":             home.Room,
+			"bed":              home.Bed,
+			"rooms":            home.Rooms,
+			"bathrooms":        home.Bathrooms,
+			"smoking":          home.Smoking,
+			"guest":            home.Guest,
+			"pet":              home.Pet,
+			"bills_included":   home.BillsIncluded,
+			"contract":         home.Contract,
+			"security_deposit": home.SecurityDeposit,
+			"price":            home.Price,
+		},
+	})
+	if err != nil {
+		span.RecordError(err)
+
+		return fmt.Errorf("mongodb update failed: %w", err)
+	}
+
+	if result.MatchedCount == 0 {
+		return ErrIDNotFound
+	}
+
+	return nil
 }

@@ -17,7 +17,7 @@ import (
 
 const enable = 1
 
-func main(shutdonwer fx.Shutdowner, logger *zap.Logger, db *mongo.Database) {
+func main(shutdowner fx.Shutdowner, logger *zap.Logger, db *mongo.Database) {
 	idx, err := db.Collection(user.Collection).Indexes().CreateOne(
 		context.Background(),
 		mongo.IndexModel{
@@ -30,7 +30,9 @@ func main(shutdonwer fx.Shutdowner, logger *zap.Logger, db *mongo.Database) {
 
 	logger.Info("database index", zap.Any("index", idx))
 
-	_ = shutdonwer.Shutdown()
+	if err := shutdowner.Shutdown(); err != nil {
+		logger.Error("failed to shutdown", zap.Error(err))
+	}
 }
 
 // Register migrate command.

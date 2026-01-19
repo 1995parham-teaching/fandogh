@@ -1,10 +1,5 @@
 ---
 services:
-  opa:
-    image: openpolicyagent/opa
-    ports:
-      - 8181:8181
-    command: run --server --log-level debug --addr=0.0.0.0:8181
   database:
     image: mongo:latest
     ports:
@@ -15,16 +10,14 @@ services:
       timeout: 5s
       retries: 5
       start_period: 40s
-  minio:
-    image: minio/minio
-    environment:
-      - MINIO_ACCESS_KEY=access
-      - MINIO_SECRET_KEY=topsecret
+  seaweedfs:
+    image: chrislusf/seaweedfs
     ports:
-      - 9000:9000
-    command: server /data
+      - 8333:8333
+      - 9333:9333
+    command: server -s3
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test: ["CMD", "curl", "-f", "http://localhost:8333/status"]
       interval: 10s
       timeout: 5s
       retries: 5
