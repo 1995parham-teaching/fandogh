@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/trace/noop"
 	"go.uber.org/fx"
@@ -114,6 +115,21 @@ func (suite *MongoUserSuite) SetupSuite() {
 
 	suite.DB = database
 	suite.Store = userStore
+
+	// Create unique index on email field (same as migrate command)
+	_, err := suite.DB.Collection(user.Collection).Indexes().CreateOne(
+		context.Background(),
+		mongo.IndexModel{
+			Keys:    bson.M{"email": 1},
+			Options: options.Index().SetUnique(true),
+		})
+	suite.Require().NoError(err)
+}
+
+func (suite *MongoUserSuite) SetupTest() {
+	// Clean up before each test
+	_, err := suite.DB.Collection(user.Collection).DeleteMany(context.Background(), bson.D{})
+	suite.Require().NoError(err)
 }
 
 func (suite *MongoUserSuite) TearDownSuite() {

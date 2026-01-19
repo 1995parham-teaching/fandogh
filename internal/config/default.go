@@ -20,9 +20,9 @@ func Default() Config {
 			URL:  "mongodb://127.0.0.1:27017",
 		},
 		FileStorage: fs.Config{
-			Endpoint:  "127.0.0.1:9000",
-			AccessKey: "access",
-			SecretKey: "topsecret",
+			Endpoint:  "127.0.0.1:8333",
+			AccessKey: "",
+			SecretKey: "",
 			UseSSL:    false,
 		},
 		Monitoring: metric.Config{
