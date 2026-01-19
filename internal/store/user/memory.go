@@ -16,12 +16,17 @@ func NewMemoryUser() *MemoryUser {
 	}
 }
 
-func (m MemoryUser) Set(_ context.Context, user model.User) error {
+func (m MemoryUser) Set(_ context.Context, user *model.User) error {
 	if _, ok := m.store[user.Email]; ok {
 		return ErrEmailDuplicate
 	}
 
-	m.store[user.Email] = user
+	// First user becomes admin
+	if len(m.store) == 0 {
+		user.Admin = true
+	}
+
+	m.store[user.Email] = *user
 
 	return nil
 }

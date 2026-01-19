@@ -1,7 +1,9 @@
+@base_url = http://127.0.0.1:1378
+
 ### create_user
 
-# Create a new user
-POST 127.0.0.1:1378/register HTTP/1.1
+# Create a new user (first user becomes admin)
+POST {{base_url}}/register HTTP/1.1
 Content-Type: application/json
 
 {
@@ -13,7 +15,7 @@ Content-Type: application/json
 ### login
 
 # Login
-POST 127.0.0.1:1378/login HTTP/1.1
+POST {{base_url}}/login HTTP/1.1
 Content-Type: application/json
 
 {
@@ -24,7 +26,7 @@ Content-Type: application/json
 ### new_home
 
 # Create a new home (with optional base64 photos)
-POST 127.0.0.1:1378/api/homes HTTP/1.1
+POST {{base_url}}/api/homes HTTP/1.1
 Authorization: Bearer {{login.response.body.accessToken}}
 Content-Type: application/json
 
@@ -50,19 +52,19 @@ Content-Type: application/json
 ### list_homes
 
 # List homes with pagination
-GET 127.0.0.1:1378/api/homes?skip=0&limit=10 HTTP/1.1
+GET {{base_url}}/api/homes?skip=0&limit=10 HTTP/1.1
 Authorization: Bearer {{login.response.body.accessToken}}
 
 ### get_home
 
 # Get a specific home by ID
-GET 127.0.0.1:1378/api/homes/{{new_home.response.body.id}} HTTP/1.1
+GET {{base_url}}/api/homes/{{new_home.response.body.id}} HTTP/1.1
 Authorization: Bearer {{login.response.body.accessToken}}
 
 ### update_home
 
 # Update a home (only owner or admin can update)
-PUT 127.0.0.1:1378/api/homes/{{new_home.response.body.id}} HTTP/1.1
+PUT {{base_url}}/api/homes/{{new_home.response.body.id}} HTTP/1.1
 Authorization: Bearer {{login.response.body.accessToken}}
 Content-Type: application/json
 

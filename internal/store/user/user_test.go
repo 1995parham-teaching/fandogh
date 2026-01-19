@@ -65,14 +65,17 @@ func (suite *CommonUserSuite) TestSetGet() {
 
 	for _, c := range cases {
 		suite.Run(c.name, func() {
-			require.Equal(c.expectedSetErr, suite.Store.Set(context.Background(), c.user))
+			u := c.user
+			require.Equal(c.expectedSetErr, suite.Store.Set(context.Background(), &u))
 
 			if c.expectedSetErr == nil {
 				user, err := suite.Store.Get(context.Background(), c.user.Email)
 				require.Equal(c.expectedGetErr, err)
 
 				if c.expectedGetErr == nil {
-					require.Equal(c.user, user)
+					require.Equal(u.Email, user.Email)
+					require.Equal(u.Name, user.Name)
+					require.Equal(u.Password, user.Password)
 				}
 			}
 		})

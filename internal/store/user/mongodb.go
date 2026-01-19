@@ -40,14 +40,26 @@ func Provide(db *mongo.Database, tracer trace.Tracer) *MongoUser {
 	return NewMongoUser(db, tracer)
 }
 
-// Set saves given user in database.
-func (s *MongoUser) Set(ctx context.Context, user model.User) error {
+// Set saves given user in database. The first registered user becomes admin.
+func (s *MongoUser) Set(ctx context.Context, user *model.User) error {
 	ctx, span := s.Tracer.Start(ctx, "store.user.set")
 	defer span.End()
 
 	users := s.DB.Collection(Collection)
 
-	_, err := users.InsertOne(ctx, user)
+	// Check if this is the first user - make them admin
+	count, err := users.CountDocuments(ctx, bson.M{})
+	if err != nil {
+		span.RecordError(err)
+
+		return fmt.Errorf("mongodb count failed: %w", err)
+	}
+
+	if count == 0 {
+		user.Admin = true
+	}
+
+	_, err = users.InsertOne(ctx, user)
 	if err != nil {
 		span.RecordError(err)
 

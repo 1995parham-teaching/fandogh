@@ -46,9 +46,10 @@ func (h User) Create(c echo.Context) error {
 		Email:    rq.Email,
 		Password: rq.Password,
 		Name:     rq.Name,
+		Admin:    false,
 	}
 
-	err = h.Store.Set(ctx, u)
+	err = h.Store.Set(ctx, &u)
 	if err != nil {
 		span.RecordError(err)
 

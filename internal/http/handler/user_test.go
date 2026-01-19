@@ -157,7 +157,7 @@ func (suite *UserSuite) TestRegister() {
 func (suite *UserSuite) TestLogin() {
 	require := suite.Require()
 
-	require.NoError(suite.store.Set(context.Background(), model.User{
+	require.NoError(suite.store.Set(context.Background(), &model.User{
 		Name:     "Elahe Dastan",
 		Email:    "elahe.dstn@gmail.com",
 		Password: "123456",
