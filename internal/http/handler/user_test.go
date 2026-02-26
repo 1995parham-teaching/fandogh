@@ -13,7 +13,7 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/http/request"
 	"github.com/1995parham-teaching/fandogh/internal/model"
 	store "github.com/1995parham-teaching/fandogh/internal/store/user"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"github.com/stretchr/testify/suite"
 	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/trace/noop"

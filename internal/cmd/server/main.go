@@ -11,7 +11,7 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/store/home"
 	"github.com/1995parham-teaching/fandogh/internal/store/user"
 	"github.com/1995parham-teaching/fandogh/internal/telemetry/trace"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"

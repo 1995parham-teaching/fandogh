@@ -19,4 +19,4 @@ linters:
   settings:
     wrapcheck:
       ignore-package-globs:
-        - github.com/labstack/echo/v4
+        - github.com/labstack/echo/v5

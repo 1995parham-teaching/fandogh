@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/1995parham-teaching/fandogh/internal/http/handler"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"github.com/stretchr/testify/suite"
 	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/trace/noop"

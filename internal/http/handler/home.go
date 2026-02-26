@@ -12,7 +12,7 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/model"
 	"github.com/1995parham-teaching/fandogh/internal/store/home"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 )
@@ -32,7 +32,7 @@ type Home struct {
 // New creates a home based on user request.
 // Accepts JSON body with optional base64-encoded photos.
 // nolint: wrapcheck, funlen, cyclop
-func (h Home) New(c echo.Context) error {
+func (h Home) New(c *echo.Context) error {
 	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.home.create")
 	defer span.End()
 
@@ -127,7 +127,7 @@ func (h Home) New(c echo.Context) error {
 
 // Get retrieves a home by its ID.
 // nolint: wrapcheck
-func (h Home) Get(c echo.Context) error {
+func (h Home) Get(c *echo.Context) error {
 	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.home.get")
 	defer span.End()
 
@@ -152,7 +152,7 @@ func (h Home) Get(c echo.Context) error {
 
 // List retrieves homes with pagination.
 // nolint: wrapcheck
-func (h Home) List(c echo.Context) error {
+func (h Home) List(c *echo.Context) error {
 	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.home.list")
 	defer span.End()
 
@@ -183,7 +183,7 @@ func (h Home) List(c echo.Context) error {
 
 // Update modifies an existing home. Only the owner or an admin can update.
 // nolint: wrapcheck, cyclop, funlen
-func (h Home) Update(c echo.Context) error {
+func (h Home) Update(c *echo.Context) error {
 	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.home.update")
 	defer span.End()
 

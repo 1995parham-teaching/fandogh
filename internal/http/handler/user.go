@@ -10,7 +10,7 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/http/response"
 	"github.com/1995parham-teaching/fandogh/internal/model"
 	"github.com/1995parham-teaching/fandogh/internal/store/user"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 )
@@ -22,7 +22,7 @@ type User struct {
 	JWT    jwt.JWT
 }
 
-func (h User) Create(c echo.Context) error {
+func (h User) Create(c *echo.Context) error {
 	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.user.create")
 	defer span.End()
 
@@ -57,7 +57,7 @@ func (h User) Create(c echo.Context) error {
 			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("email %s already exists", u.Email))
 		}
 
-		return echo.NewHTTPError(http.StatusInternalServerError, err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	return c.JSON(http.StatusCreated, u)
@@ -65,7 +65,7 @@ func (h User) Create(c echo.Context) error {
 
 // Login checks given credentials and generate jwt token
 // nolint: wrapcheck
-func (h User) Login(c echo.Context) error {
+func (h User) Login(c *echo.Context) error {
 	ctx, span := h.Tracer.Start(c.Request().Context(), "handler.user.login")
 	defer span.End()
 
@@ -93,7 +93,7 @@ func (h User) Login(c echo.Context) error {
 			return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("email %s does not exist", rq.Email))
 		}
 
-		return echo.NewHTTPError(http.StatusInternalServerError, err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	if u.Password != rq.Password {
@@ -106,7 +106,7 @@ func (h User) Login(c echo.Context) error {
 
 	t, err := h.JWT.NewAccessToken(u)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	res.AccessToken = t

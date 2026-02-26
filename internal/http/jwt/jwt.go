@@ -8,8 +8,8 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/model"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	echojwt "github.com/labstack/echo-jwt/v4"
-	"github.com/labstack/echo/v4"
+	echojwt "github.com/labstack/echo-jwt/v5"
+	"github.com/labstack/echo/v5"
 )
 
 // Claims extends jwt.RegisteredClaims with custom fields.
@@ -38,7 +38,7 @@ func (j JWT) Middleware() echo.MiddlewareFunc {
 		ContextKey:    common.UserContextKey,
 		SigningKey:    []byte(j.AccessTokenSecret),
 		SigningMethod: jwt.SigningMethodHS256.Name,
-		NewClaimsFunc: func(_ echo.Context) jwt.Claims {
+		NewClaimsFunc: func(_ *echo.Context) jwt.Claims {
 			return new(Claims)
 		},
 	})
