@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/1995parham-teaching/fandogh/internal/http/handler"
@@ -54,7 +55,7 @@ func Provide(
 		fx.Hook{
 			OnStart: func(_ context.Context) error {
 				go func() {
-					if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+					if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 						logger.Fatal("echo initiation failed", zap.Error(err))
 					}
 				}()
