@@ -20,10 +20,11 @@ func Default() Config {
 			URL:  "mongodb://127.0.0.1:27017",
 		},
 		FileStorage: fs.Config{
-			Endpoint:  "127.0.0.1:8333",
-			AccessKey: "",
-			SecretKey: "",
+			Endpoint:  "127.0.0.1:9000",
+			AccessKey: "rustfsadmin",
+			SecretKey: "rustfsadmin",
 			UseSSL:    false,
+			Region:    "us-east-1",
 		},
 		Monitoring: metric.Config{
 			Address: ":8080",

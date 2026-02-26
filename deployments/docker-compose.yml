@@ -10,14 +10,16 @@ services:
       timeout: 5s
       retries: 5
       start_period: 40s
-  seaweedfs:
-    image: chrislusf/seaweedfs
+  rustfs:
+    image: rustfs/rustfs:latest
     ports:
-      - 8333:8333
-      - 9333:9333
-    command: server -s3
+      - 9000:9000
+      - 9001:9001
+    environment:
+      - RUSTFS_ACCESS_KEY=rustfsadmin
+      - RUSTFS_SECRET_KEY=rustfsadmin
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8333/status"]
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 10s
       timeout: 5s
       retries: 5

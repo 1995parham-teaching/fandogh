@@ -12,7 +12,8 @@ telemetry:
     enabled: true
     agent: "127.0.0.1:4317"
 file_storage:
-  endpoint: "127.0.0.1:8333"
-  access_key: ""
-  secret_key: ""
+  endpoint: "127.0.0.1:9000"
+  access_key: "rustfsadmin"
+  secret_key: "rustfsadmin"
   use_ssl: false
+  region: "us-east-1"

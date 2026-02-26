@@ -7,7 +7,7 @@ const (
 	Double Bed = 2
 )
 
-// Photo contains the information use for minio.
+// Photo contains the information for S3-compatible storage.
 type Photo struct {
 	Name        string
 	ContentType string

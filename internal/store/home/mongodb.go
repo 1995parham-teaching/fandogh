@@ -8,7 +8,8 @@ import (
 
 	"github.com/1995parham-teaching/fandogh/internal/fs"
 	"github.com/1995parham-teaching/fandogh/internal/model"
-	"github.com/minio/minio-go/v7"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
@@ -23,7 +24,7 @@ var (
 // MongoHome communicate with homes collection in MongoDB.
 type MongoHome struct {
 	DB     *mongo.Database
-	Minio  *minio.Client
+	S3     *s3.Client
 	Tracer trace.Tracer
 }
 
@@ -36,16 +37,16 @@ const (
 )
 
 // NewMongoHome creates new Home store.
-func NewMongoHome(db *mongo.Database, client *minio.Client, tracer trace.Tracer) *MongoHome {
+func NewMongoHome(db *mongo.Database, client *s3.Client, tracer trace.Tracer) *MongoHome {
 	return &MongoHome{
 		DB:     db,
 		Tracer: tracer,
-		Minio:  client,
+		S3:     client,
 	}
 }
 
 // Provide creates new Home store for dependency injection.
-func Provide(db *mongo.Database, client *minio.Client, tracer trace.Tracer) *MongoHome {
+func Provide(db *mongo.Database, client *s3.Client, tracer trace.Tracer) *MongoHome {
 	return NewMongoHome(db, client, tracer)
 }
 
@@ -54,11 +55,11 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 	ctx, span := s.Tracer.Start(ctx, "store.home.set")
 	defer span.End()
 
-	err := fs.Bucket(ctx, s.Minio, Bucket)
+	err := fs.Bucket(ctx, s.S3, Bucket)
 	if err != nil {
 		span.RecordError(ErrIDNotEmpty)
 
-		return fmt.Errorf("minio bucket creation/checking failed: %w", err)
+		return fmt.Errorf("s3 bucket creation/checking failed: %w", err)
 	}
 
 	if home.ID != "" {
@@ -77,14 +78,16 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 		home.Photos[photo.Name] = fs.Generate(home.ID, photo.Name)
 
 		// nolint: exhaustruct
-		_, err = s.Minio.PutObject(ctx, Bucket, home.Photos[photo.Name],
-			bytes.NewReader(photo.Content), int64(len(photo.Content)), minio.PutObjectOptions{
-				ContentType: photo.ContentType,
-			})
+		_, err = s.S3.PutObject(ctx, &s3.PutObjectInput{
+			Bucket:      aws.String(Bucket),
+			Key:         aws.String(home.Photos[photo.Name]),
+			Body:        bytes.NewReader(photo.Content),
+			ContentType: aws.String(photo.ContentType),
+		})
 		if err != nil {
 			span.RecordError(err)
 
-			return fmt.Errorf("minio object creation failed: %w", err)
+			return fmt.Errorf("s3 object creation failed: %w", err)
 		}
 	}
 

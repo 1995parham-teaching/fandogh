@@ -10,9 +10,9 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/logger"
 	"github.com/1995parham-teaching/fandogh/internal/metric"
 	telemetry "github.com/1995parham-teaching/fandogh/internal/telemetry/config"
-	"github.com/knadh/koanf"
+	"github.com/knadh/koanf/v2"
 	"github.com/knadh/koanf/parsers/yaml"
-	"github.com/knadh/koanf/providers/env"
+	"github.com/knadh/koanf/providers/env/v2"
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/providers/structs"
 	"go.uber.org/fx"
@@ -53,9 +53,13 @@ func Provide() Config {
 	}
 
 	// load environment variables
-	err = k.Load(env.Provider(Prefix, ".", func(s string) string {
-		return strings.ReplaceAll(strings.ToLower(
-			strings.TrimPrefix(s, Prefix)), "_", ".")
+	// nolint: exhaustruct
+	err = k.Load(env.Provider(".", env.Opt{
+		Prefix: Prefix,
+		TransformFunc: func(k, v string) (string, any) {
+			return strings.ReplaceAll(strings.ToLower(
+				strings.TrimPrefix(k, Prefix)), "_", "."), v
+		},
 	}), nil)
 	if err != nil {
 		log.Printf("error loading environment variables: %s", err)
