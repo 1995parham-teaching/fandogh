@@ -15,6 +15,7 @@ linters:
     - funcorder
     - noinlineerr
     - gomoddirectives
+    - gosec
   settings:
     wrapcheck:
       ignore-package-globs:
