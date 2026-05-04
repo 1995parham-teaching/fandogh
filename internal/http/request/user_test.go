@@ -6,6 +6,11 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/http/request"
 )
 
+const (
+	parhamName       = "Parham Alvani"
+	parhamYahooEmail = "parham.alvani@yahoo.com"
+)
+
 // nolint: funlen
 func TestRegisterValidation(t *testing.T) {
 	t.Parallel()
@@ -23,45 +28,45 @@ func TestRegisterValidation(t *testing.T) {
 			email:    "",
 		},
 		{
-			name:     "Parham Alvani",
+			name:     parhamName,
 			password: "1234567",
 			email:    "parham.alvani@gmail.com",
 			isValid:  true,
 		},
 		{
-			name:     "Parham Alvani",
+			name:     parhamName,
 			password: "1234567",
 			email:    "parham.alvani_gmail",
 			isValid:  false,
 		},
 		{
-			name:     "Parham Alvani",
+			name:     parhamName,
 			password: "1234567",
 			email:    "parham.alvani@gmail",
 			isValid:  false,
 		},
 		{
-			name:     "Parham Alvani",
+			name:     parhamName,
 			password: "1234567",
-			email:    "parham.alvani@yahoo.com",
+			email:    parhamYahooEmail,
 			isValid:  true,
 		},
 		{
-			name:     "Parham Alvani",
+			name:     parhamName,
 			password: "12345",
-			email:    "parham.alvani@yahoo.com",
+			email:    parhamYahooEmail,
 			isValid:  false,
 		},
 		{
-			name:     "Parham Alvani",
+			name:     parhamName,
 			password: "123456",
-			email:    "parham.alvani@yahoo.com",
+			email:    parhamYahooEmail,
 			isValid:  true,
 		},
 		{
 			name:     "پرهام الوانی",
 			password: "123456",
-			email:    "parham.alvani@yahoo.com",
+			email:    parhamYahooEmail,
 			isValid:  true,
 		},
 	}
@@ -114,17 +119,17 @@ func TestLoginValidation(t *testing.T) {
 		},
 		{
 			password: "1234567",
-			email:    "parham.alvani@yahoo.com",
+			email:    parhamYahooEmail,
 			isValid:  true,
 		},
 		{
 			password: "12345",
-			email:    "parham.alvani@yahoo.com",
+			email:    parhamYahooEmail,
 			isValid:  false,
 		},
 		{
 			password: "123456",
-			email:    "parham.alvani@yahoo.com",
+			email:    parhamYahooEmail,
 			isValid:  true,
 		},
 	}

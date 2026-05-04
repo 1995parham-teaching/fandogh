@@ -6,6 +6,8 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/http/request"
 )
 
+const goodValue = "good"
+
 // nolint: funlen
 func TestNewHomeValidation(t *testing.T) {
 	t.Parallel()
@@ -41,7 +43,7 @@ func TestNewHomeValidation(t *testing.T) {
 				Location:        "127.0.0.1",
 				Description:     "very good home",
 				Peoples:         4,
-				Room:            "good",
+				Room:            goodValue,
 				Bed:             "single",
 				Rooms:           3,
 				Bathrooms:       1,
@@ -49,7 +51,7 @@ func TestNewHomeValidation(t *testing.T) {
 				Guest:           false,
 				Pet:             false,
 				BillsIncluded:   false,
-				Contract:        "good",
+				Contract:        goodValue,
 				SecurityDeposit: 100,
 				Price:           100,
 				Photos:          nil,
@@ -62,7 +64,7 @@ func TestNewHomeValidation(t *testing.T) {
 				Location:        "127.0.0.1",
 				Description:     "very good home",
 				Peoples:         4,
-				Room:            "good",
+				Room:            goodValue,
 				Bed:             "s",
 				Rooms:           3,
 				Bathrooms:       1,
@@ -70,7 +72,7 @@ func TestNewHomeValidation(t *testing.T) {
 				Guest:           false,
 				Pet:             false,
 				BillsIncluded:   false,
-				Contract:        "good",
+				Contract:        goodValue,
 				SecurityDeposit: 100,
 				Price:           100,
 				Photos:          nil,

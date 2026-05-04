@@ -22,6 +22,12 @@ import (
 	"go.uber.org/zap"
 )
 
+const (
+	parhamName  = "Parham Alvani"
+	parhamEmail = "parham.alvani@gmail.com"
+	elaheEmail  = "elahe.dstn@gmail.com"
+)
+
 type UserSuite struct {
 	suite.Suite
 
@@ -82,9 +88,9 @@ func (suite *UserSuite) TestBadRequest() {
 
 	// because there is no content-type header, request is categorized as a bad request.
 	b, err := json.Marshal(request.Register{
-		Name:     "Parham Alvani",
+		Name:     parhamName,
 		Password: "123456",
-		Email:    "parham.alvani@gmail.com",
+		Email:    parhamEmail,
 	})
 	require.NoError(err)
 
@@ -116,23 +122,23 @@ func (suite *UserSuite) TestRegister() {
 			name: "Successful",
 			code: http.StatusCreated,
 			register: request.Register{
-				Name:     "Parham Alvani",
-				Email:    "parham.alvani@gmail.com",
+				Name:     parhamName,
+				Email:    parhamEmail,
 				Password: "123456",
 			},
 		}, {
 			name: "Duplicate Key",
 			code: http.StatusBadRequest,
 			register: request.Register{
-				Name:     "Parham Alvani",
-				Email:    "parham.alvani@gmail.com",
+				Name:     parhamName,
+				Email:    parhamEmail,
 				Password: "123456",
 			},
 		}, {
 			name: "Invalid URL",
 			code: http.StatusBadRequest,
 			register: request.Register{
-				Name:     "Parham Alvani",
+				Name:     parhamName,
 				Email:    "parham.alvani@gmail",
 				Password: "123456",
 			},
@@ -159,7 +165,7 @@ func (suite *UserSuite) TestLogin() {
 
 	require.NoError(suite.store.Set(context.Background(), &model.User{
 		Name:     "Elahe Dastan",
-		Email:    "elahe.dstn@gmail.com",
+		Email:    elaheEmail,
 		Password: "123456",
 		Admin:    false,
 	}))
@@ -173,14 +179,14 @@ func (suite *UserSuite) TestLogin() {
 			name: "Successful",
 			code: http.StatusOK,
 			login: request.Login{
-				Email:    "elahe.dstn@gmail.com",
+				Email:    elaheEmail,
 				Password: "123456",
 			},
 		}, {
 			name: "Incorrect Password",
 			code: http.StatusUnauthorized,
 			login: request.Login{
-				Email:    "elahe.dstn@gmail.com",
+				Email:    elaheEmail,
 				Password: "1234567",
 			},
 		}, {
