@@ -18,7 +18,6 @@ import (
 	"github.com/1995parham-teaching/fandogh/internal/fs"
 	"github.com/1995parham-teaching/fandogh/internal/model"
 	"github.com/1995parham-teaching/fandogh/internal/store/home"
-	"github.com/1995parham-teaching/fandogh/internal/store/user"
 )
 
 type CommonHomeSuite struct {
@@ -169,7 +168,7 @@ func (suite *MongoHomeSuite) SetupSuite() {
 }
 
 func (suite *MongoHomeSuite) TearDownSuite() {
-	_, err := suite.DB.Collection(user.Collection).DeleteMany(context.Background(), bson.D{})
+	_, err := suite.DB.Collection(home.Collection).DeleteMany(context.Background(), bson.D{})
 	suite.Require().NoError(err)
 
 	suite.app.RequireStop()
