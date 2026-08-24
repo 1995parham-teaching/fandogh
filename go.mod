@@ -3,7 +3,7 @@ module github.com/1995parham-teaching/fandogh
 go 1.26
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.43.6
+	github.com/aws/aws-sdk-go-v2 v1.43.7
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.36
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.107.2
 	github.com/go-ozzo/ozzo-validation/v4 v4.4.1
