@@ -29,7 +29,7 @@ func main(
 // Register server command.
 func Register(root *cobra.Command) {
 	root.AddCommand(
-		// nolint: exhaustruct
+		// nolint: exhaustruct_v5
 		&cobra.Command{
 			Use:   "server",
 			Short: "Run server to serve the requests",

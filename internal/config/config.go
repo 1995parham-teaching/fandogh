@@ -53,7 +53,7 @@ func Provide() Config {
 	}
 
 	// load environment variables
-	// nolint: exhaustruct
+	// nolint: exhaustruct_v5
 	err = k.Load(env.Provider(".", env.Opt{
 		Prefix: Prefix,
 		TransformFunc: func(k, v string) (string, any) {

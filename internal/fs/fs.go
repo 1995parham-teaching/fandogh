@@ -16,7 +16,7 @@ func Provide(cfg Config) *s3.Client {
 		scheme = "https"
 	}
 
-	// nolint: exhaustruct
+	// nolint: exhaustruct_v5
 	client := s3.New(s3.Options{
 		BaseEndpoint: aws.String(fmt.Sprintf("%s://%s", scheme, cfg.Endpoint)),
 		Region:       cfg.Region,
@@ -29,7 +29,7 @@ func Provide(cfg Config) *s3.Client {
 
 // Bucket ensures the specified bucket exists in the S3-compatible storage.
 func Bucket(ctx context.Context, client *s3.Client, bucket string) error {
-	// nolint: exhaustruct
+	// nolint: exhaustruct_v5
 	_, err := client.HeadBucket(ctx, &s3.HeadBucketInput{
 		Bucket: aws.String(bucket),
 	})
@@ -37,7 +37,7 @@ func Bucket(ctx context.Context, client *s3.Client, bucket string) error {
 		return nil
 	}
 
-	// nolint: exhaustruct
+	// nolint: exhaustruct_v5
 	_, err = client.CreateBucket(ctx, &s3.CreateBucketInput{
 		Bucket: aws.String(bucket),
 	})

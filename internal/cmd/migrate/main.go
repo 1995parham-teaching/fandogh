@@ -38,7 +38,7 @@ func main(shutdowner fx.Shutdowner, logger *zap.Logger, db *mongo.Database) {
 // Register migrate command.
 func Register(root *cobra.Command) {
 	root.AddCommand(
-		// nolint: exhaustruct
+		// nolint: exhaustruct_v5
 		&cobra.Command{
 			Use:   "migrate",
 			Short: "Setup database indices",

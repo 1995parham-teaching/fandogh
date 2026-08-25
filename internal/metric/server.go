@@ -36,7 +36,7 @@ func NewServer(cfg Config) Server {
 	mux.Handle("/metrics", promhttp.Handler())
 
 	return Server{
-		// nolint exhaustruct
+		// nolint: exhaustruct_v5
 		srv: &http.Server{
 			Addr:              cfg.Address,
 			Handler:           mux,

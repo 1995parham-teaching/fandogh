@@ -45,7 +45,7 @@ func Provide(
 		Logger: logger.Named("handler").Named("home"),
 	}.Register(api)
 
-	// nolint: exhaustruct
+	// nolint: exhaustruct_v5
 	server := &http.Server{
 		Addr:    ":1378",
 		Handler: app,

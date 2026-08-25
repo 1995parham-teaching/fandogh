@@ -33,7 +33,7 @@ func Provide(cfg Config) JWT {
 }
 
 func (j JWT) Middleware() echo.MiddlewareFunc {
-	// nolint: exhaustruct
+	// nolint: exhaustruct_v5
 	return echojwt.WithConfig(echojwt.Config{
 		ContextKey:    common.UserContextKey,
 		SigningKey:    []byte(j.AccessTokenSecret),

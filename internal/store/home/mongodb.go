@@ -77,7 +77,7 @@ func (s *MongoHome) Set(ctx context.Context, home *model.Home, photos []model.Ph
 	for _, photo := range photos {
 		home.Photos[photo.Name] = fs.Generate(home.ID, photo.Name)
 
-		// nolint: exhaustruct
+		// nolint: exhaustruct_v5
 		_, err = s.S3.PutObject(ctx, &s3.PutObjectInput{
 			Bucket:      aws.String(Bucket),
 			Key:         aws.String(home.Photos[photo.Name]),
@@ -142,7 +142,7 @@ func (s *MongoHome) List(ctx context.Context, skip, limit int64) (ListResult, er
 		return ListResult{}, fmt.Errorf("mongodb count failed: %w", err)
 	}
 
-	// nolint: exhaustruct
+	// nolint: exhaustruct_v5
 	opts := options.Find().SetSkip(skip).SetLimit(limit)
 
 	cursor, err := collection.Find(ctx, bson.M{}, opts)
