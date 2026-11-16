@@ -3,8 +3,8 @@ module github.com/1995parham-teaching/fandogh
 go 1.26.0
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.47.8
-	github.com/aws/aws-sdk-go-v2/credentials v1.20.16
+	github.com/aws/aws-sdk-go-v2 v1.48.0
+	github.com/aws/aws-sdk-go-v2/credentials v1.21.0
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.9
 	github.com/go-ozzo/ozzo-validation/v4 v4.5.0
 	github.com/golang-jwt/jwt/v5 v5.3.1
@@ -31,14 +31,14 @@ require (
 require (
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.26 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.11 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.11 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.11 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.24 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.12 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.12 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.12 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.25 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.11.12 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.11 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.12 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.20.11 // indirect
-	github.com/aws/smithy-go v1.28.8 // indirect
+	github.com/aws/smithy-go v1.28.9 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
